@@ -6,6 +6,8 @@ import {useRouter} from "next/router";
 const Home: NextPage = () => {
     const [pwd, setPwd] = useState<string>("")
     const router = useRouter()
+
+
     const redirect = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         void router.push({
@@ -14,7 +16,6 @@ const Home: NextPage = () => {
                 pwd:pwd
             }
         },"groupSelect")
-
     }
 
     return (

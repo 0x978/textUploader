@@ -8,10 +8,20 @@ interface PasteMetadataProps {
     fetchedPaste:post
     handleTitleUpdate: () => Promise<void>;
     setEditGroupMode: React.Dispatch<React.SetStateAction<boolean>>;
-
 }
 
 const PasteMetadata: FC<PasteMetadataProps> = ({fetchedPaste,handleTitleUpdate,setEditGroupMode}) => {
+    const router = useRouter()
+
+    function handleEditText(){
+        void router.push({
+            pathname:"/textEdit",
+            query:{
+                id:fetchedPaste.id
+            }
+        })
+    }
+
     return(
         <div className="space-y-2">
             <h1 className="text-4xl">Text metadata</h1>
@@ -22,6 +32,8 @@ const PasteMetadata: FC<PasteMetadataProps> = ({fetchedPaste,handleTitleUpdate,s
             <div className="flex flex-col items-center space-y-3">
                 <button className="bg-puddlePurple w-36 active:translate-y-1 " onClick={() => void handleTitleUpdate()}>Change Title</button>
                 <button className="bg-puddlePurple w-36 active:translate-y-1 " onClick={() => void setEditGroupMode(true)}>Change Group</button>
+                <button className="bg-puddlePurple w-36 active:translate-y-1 " onClick={() => handleEditText()}>Edit Text</button>
+
             </div>
         </div>
     )

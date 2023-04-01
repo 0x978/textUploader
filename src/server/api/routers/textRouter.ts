@@ -92,6 +92,27 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
+    updateText: publicProcedure
+      .input(z.object({
+          id: z.string(),
+          text: z.string(),
+      }))
+      .mutation(async ({ input: { id ,text}, ctx: { prisma } }) => {
+          try {
+              return await prisma.post.update({
+                  where:{
+                      id:id
+                  },
+                  data:{
+                      text:text
+                  }
+              });
+          } catch (error) {
+              console.error(error);
+              throw new Error('Failed to fetch');
+          }
+      }),
+
     submitPost: publicProcedure
         .input(z.object({
             title: z.string(),
