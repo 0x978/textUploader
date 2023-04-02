@@ -3,15 +3,13 @@ import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import Swal from 'sweetalert2'
 import { GetServerSidePropsContext } from "next";
-import { post } from ".prisma/client";
+import { paste } from ".prisma/client";
 import EditGroupSelect from "~/components/editGroupSelect";
 import PasteMetadata from "~/components/pasteMetadata";
 
-interface ctx {
-    pwd: string
-}
 
-const Edit: FC<ctx> = (ctx) => {
+
+const Edit: FC = () => {
     const router = useRouter()
     const [editGroupMode, setEditGroupMode] = useState<boolean>(false)
     const { mutate: updateTitle } = api.text.updateTitle.useMutation()
@@ -24,8 +22,8 @@ const Edit: FC<ctx> = (ctx) => {
         textID: id
     });
 
-    const { data: textData, isLoading } = api.text.getAllText.useQuery<post[]>(undefined, {
-        onSuccess(res: post[]) {
+    const { data: textData, isLoading } = api.text.getAllText.useQuery<paste[]>(undefined, {
+        onSuccess(res: paste[]) {
             const uniqueGroup = new Map<string, number>();
             res.forEach(r => {
                 const count = uniqueGroup.get(r.group);
@@ -89,7 +87,7 @@ const Edit: FC<ctx> = (ctx) => {
                                 : // if user is not currently in group edit mode, show the pastes' metadata
                                 <div>
                                     <PasteMetadata fetchedPaste={fetchedPaste} handleTitleUpdate={handleTitleUpdate} setEditGroupMode={setEditGroupMode} />
-                                    <button className="bg-puddlePurple w-24 hover:text-red-400 my-3 active:translate-y-1" onClick={() => void router.push({ pathname: "pasteSelect", query: { pwd: ctx.pwd, group: fetchedPaste.group } }, "home")}>Return</button>
+                                    <button className="bg-puddlePurple w-24 hover:text-red-400 my-3 active:translate-y-1" onClick={() => void router.push({ pathname: "pasteSelect", query: { group: fetchedPaste.group } }, "home")}>Return</button>
                                 </div>
                             }
                         </div>
@@ -101,24 +99,6 @@ const Edit: FC<ctx> = (ctx) => {
     )
 }
 
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
-    const password = process.env.PASSWORD;
 
-    if (context.query.pwd !== password) {
-        return {
-            redirect: {
-                destination: '/stop',
-                permanent: false,
-            },
-        }
-    }
-
-    return ({
-        props: {
-            pwd: password,
-        }
-    })
-
-}
 
 export default Edit

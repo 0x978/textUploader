@@ -1,11 +1,11 @@
-// component representing the metadata of a post (date, title, group); as well as the options to update metadata.
+// component representing the metadata of a paste (date, title, group); as well as the options to update metadata.
 
 import React, {FC} from "react"
-import {post} from ".prisma/client";
+import {paste} from ".prisma/client";
 import {useRouter} from "next/router";
 
 interface PasteMetadataProps {
-    fetchedPaste:post
+    fetchedPaste:paste
     handleTitleUpdate: () => Promise<void>;
     setEditGroupMode: React.Dispatch<React.SetStateAction<boolean>>;
 }

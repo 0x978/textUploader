@@ -1,11 +1,11 @@
 // This component represents the user interface for changing the group that a paste belongs to.
 
 import {FC} from "react"
-import {post} from ".prisma/client";
+import {paste} from ".prisma/client";
 
 interface EditGroupSelectProps {
     groups: string[],
-    fetchedPaste: post,
+    fetchedPaste: paste,
     handleNewGroup: () => Promise<void>;
     handleGroupChange: (newGroup: string) => void;
 

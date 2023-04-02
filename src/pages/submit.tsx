@@ -2,23 +2,25 @@ import {FC, MouseEvent, useState} from "react"
 import {useRouter} from "next/router";
 import {GetServerSidePropsContext} from "next";
 import {api} from "~/utils/api";
-import {post} from ".prisma/client";
+import {paste} from ".prisma/client";
+import { useSession } from "next-auth/react";
 
-interface ctx {
-    pwd: string;
-}
 
-const Submit: FC<ctx> = (ctx) => {
+const Submit: FC = () => {
     const router = useRouter()
     const [title, setTitle] = useState<string>("")
     const [group, setGroup] = useState<string>("")
     const [text, setText] = useState<string>("")
+    const {data: session} = useSession()
 
-    const {mutate:submitPaste} = api.text.submitPost.useMutation<post>()
+    console.log(session?.user.id)
+
+
+    const {mutate:submitPaste} = api.text.submitPost.useMutation<paste>()
 
     const redirect = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        void router.push({pathname: "groupSelect", query: {pwd: ctx.pwd}}, "groupSelect")
+        void router.push({pathname: "groupSelect"})
     }
 
     const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
@@ -30,13 +32,8 @@ const Submit: FC<ctx> = (ctx) => {
             title:title,
             group:parsedGroup,
             text:text,
+            userID:session?.user.id
         })
-        void router.push({
-            pathname:"groupSelect",
-            query:{
-                pwd:ctx.pwd
-            }
-        },"groupSelect")
     }
 
 
@@ -61,23 +58,6 @@ const Submit: FC<ctx> = (ctx) => {
     )
 }
 
-export const getServerSideProps = (context:GetServerSidePropsContext) => {
-    const password = process.env.PASSWORD;
-    if(context.query.pwd !== process.env.PASSWORD){
-        return {
-            redirect: {
-                destination: '/stop',
-                permanent: false,
-            },
-        }
-    }
 
-    return({
-        props:{
-            pwd:password
-        }
-    })
-
-}
 
 export default Submit

@@ -2,7 +2,7 @@ import {FC} from "react"
 import {useRouter} from "next/router";
 import {GetServerSidePropsContext} from "next";
 import {api} from "~/utils/api";
-import {post} from ".prisma/client";
+import {paste} from ".prisma/client";
 import swal from "sweetalert2"
 
 
@@ -15,7 +15,7 @@ const RawPasteDisplay: FC<ctx> = (ctx) => {
     const router = useRouter()
     const text = router.query.text
 
-    const { data: textData } = api.text.getTextByID.useQuery<post[]>({
+    const { data: textData } = api.text.getTextByID.useQuery<paste[]>({
         textID: ctx.id
     })
 
@@ -32,7 +32,6 @@ const RawPasteDisplay: FC<ctx> = (ctx) => {
     }
     }
 
-
     return(
         <>
             <main className="flex h-screen bg-deepPurple font-sans text-white min-h-screen overflow-y-auto">
@@ -47,19 +46,9 @@ const RawPasteDisplay: FC<ctx> = (ctx) => {
 }
 
 export const getServerSideProps = (context:GetServerSidePropsContext) => {
-    const password = process.env.PASSWORD;
-    if(context.query.pwd !== process.env.PASSWORD){
-        return {
-            redirect: {
-                destination: '/stop',
-                permanent: false,
-            },
-        }
-    }
 
     return({
         props:{
-            pwd:password,
             id:context.query.id
         }
     })

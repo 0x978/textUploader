@@ -2,6 +2,7 @@ import {type NextPage} from "next";
 import Head from "next/head";
 import {MouseEvent, useState} from "react";
 import {useRouter} from "next/router";
+import { signIn } from "next-auth/react";
 
 const Home: NextPage = () => {
     const [pwd, setPwd] = useState<string>("")
@@ -39,6 +40,7 @@ const Home: NextPage = () => {
                             <div><button className="my-5 w-20 bg-shallowPurple" onClick={(e) => redirect(e)} >Ok</button></div>
                         </form>
 
+                        <button onClick={() => signIn("discord")}>Discord</button>
                     </div>
                 </div>
             </main>

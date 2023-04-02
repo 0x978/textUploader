@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { api } from "~/utils/api";
-import { post } from ".prisma/client";
+import { paste } from ".prisma/client";
 import { GetServerSidePropsContext } from "next";
 
 interface textEditProps {
@@ -11,7 +11,7 @@ const TextEdit: FC<textEditProps> = ({ id }) => {
   const [text, setText] = useState<string>("");
   const { mutate: updateText } = api.text.updateText.useMutation();
 
-  const { data: textData, isLoading } = api.text.getTextByID.useQuery<post>({
+  const { data: textData, isLoading } = api.text.getTextByID.useQuery<paste>({
     textID: id
   }, {
     onSuccess: () => {
@@ -40,7 +40,7 @@ const TextEdit: FC<textEditProps> = ({ id }) => {
             <h1>Paste Edit:</h1>
           </div>
 
-          <textarea className="w-full resize bg-puddlePurple resize-y min-h-[5rem] h-96" defaultValue={text}
+          <textarea className="w-full resize bg-puddlePurple min-h-[5rem] h-96" defaultValue={text}
                     onChange={(e) => setText(e.target.value)}></textarea>
 
           <div className="text-center my-5">
@@ -60,24 +60,6 @@ const TextEdit: FC<textEditProps> = ({ id }) => {
   );
 };
 
-
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
-
-  if (!context.query.id) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false
-      }
-    };
-  }
-
-  return ({
-    props: {
-      id: context.query.id
-    }
-  });
-};
 
 
 export default TextEdit;

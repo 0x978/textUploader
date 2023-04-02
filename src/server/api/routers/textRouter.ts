@@ -4,12 +4,18 @@ import {z} from "zod";
 export const textRouter = createTRPCRouter({
 
     getAllText: publicProcedure
-        .query(async ({ ctx: { prisma } }) => {
+      .input(z.object({
+          userID:z.string()
+      }))
+        .query(async ({ input:{userID},ctx: { prisma } }) => {
             try {
-                return await prisma.post.findMany({
+                return await prisma.paste.findMany({
                     orderBy: {
                         createdAt: 'desc',
                     },
+                    where:{
+                        userID: userID,
+                    }
                 });
             } catch (error) {
                 console.error(error);
@@ -19,15 +25,17 @@ export const textRouter = createTRPCRouter({
 
     getAllTextByGroup: publicProcedure
         .input(z.object({
-            group:z.string()
+            group:z.string(),
+            userID:z.string()
         }))
-        .query(async ({ input:{group} ,ctx: { prisma } }) => {
+        .query(async ({ input:{group,userID} ,ctx: { prisma } }) => {
             try {
-                return await prisma.post.findMany({
+                return await prisma.paste.findMany({
                     orderBy: {
                         createdAt: 'desc',
                     },
                     where:{
+                        userID: userID,
                         group:group
                     }
                 });
@@ -43,7 +51,7 @@ export const textRouter = createTRPCRouter({
         }))
         .mutation(async ({ input: { id }, ctx: { prisma } }) => {
             try {
-                return await prisma.post.delete({
+                return await prisma.paste.delete({
                     where:{
                         id:id
                     }
@@ -60,7 +68,7 @@ export const textRouter = createTRPCRouter({
         }))
         .query(async ({ input: { textID }, ctx: { prisma } }) => {
             try {
-                return await prisma.post.findUnique({
+                return await prisma.paste.findUnique({
                     where: {
                         id:textID,
                     },
@@ -78,7 +86,7 @@ export const textRouter = createTRPCRouter({
         }))
         .mutation(async ({ input: { id ,title}, ctx: { prisma } }) => {
             try {
-                return await prisma.post.update({
+                return await prisma.paste.update({
                     where:{
                         id:id
                     },
@@ -99,7 +107,7 @@ export const textRouter = createTRPCRouter({
       }))
       .mutation(async ({ input: { id ,text}, ctx: { prisma } }) => {
           try {
-              return await prisma.post.update({
+              return await prisma.paste.update({
                   where:{
                       id:id
                   },
@@ -118,14 +126,16 @@ export const textRouter = createTRPCRouter({
             title: z.string(),
             group:z.string(),
             text:z.string(),
+            userID:z.string()
         }))
-        .mutation(async ({ input: { title,group,text}, ctx: { prisma } }) => {
+        .mutation(async ({ input: { title,group,text,userID}, ctx: { prisma } }) => {
             try {
-                return await prisma.post.create({
+                return await prisma.paste.create({
                     data:{
                         title:title,
                         group: group,
                         text: text,
+                        userID:userID
                     }
                 });
             } catch (error) {
@@ -141,7 +151,7 @@ export const textRouter = createTRPCRouter({
         }))
         .mutation(async ({ input: { id ,group}, ctx: { prisma } }) => {
             try {
-                return await prisma.post.update({
+                return await prisma.paste.update({
                     where:{
                         id:id
                     },

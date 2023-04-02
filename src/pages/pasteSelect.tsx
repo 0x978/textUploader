@@ -1,26 +1,27 @@
 import {type FC, useEffect, useState} from "react"
 import type {GetServerSidePropsContext} from "next";
 import {api} from "~/utils/api";
-import type {post} from ".prisma/client";
+import type {paste} from ".prisma/client";
 import Head from "next/head";
 import {useRouter} from "next/router";
+import { useSession } from "next-auth/react";
 
 interface ctx{
     group:string,
-    pwd:string
 }
 
 const PasteSelect: FC<ctx> = (ctx) => {
     const router = useRouter()
     const [min,setMin] = useState<number>(0)
-    const [textArr,setTextArr] = useState<post[]>([])
+    const [textArr,setTextArr] = useState<paste[]>([])
     const [deleteMode,setDeleteMode] = useState<boolean>(false)
     const [editMode,setEditMode] = useState<boolean>(false)
     const [style,setStyle] = useState<string>("text-superCoolEdgyPurple")
+    const {data: session} = useSession()
 
-
-    const { data: textData } = api.text.getAllTextByGroup.useQuery<post[]>({
-        group: ctx.group
+    const { data: textData } = api.text.getAllTextByGroup.useQuery<paste[]>({
+        group: ctx.group,
+        userID: session?.user.id
     })
 
     const {mutate: deleteItem} = api.text.deleteText.useMutation({onSuccess(deletedPost){
@@ -45,7 +46,6 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 pathname:"edit",
                 query:{
                     id:id,
-                    pwd:ctx.pwd
                 }
             })
         }
@@ -54,7 +54,6 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 pathname:"rawPasteDisplay",
                 query:{
                     id:id,
-                    pwd:ctx.pwd
                 }
             }," ")
         }
@@ -103,7 +102,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                             <div className="">
                                 <div className="">
 
-                                    {textArr.map((post,i) =>{ // Texts display
+                                    {textArr.map((paste,i) =>{ // Texts display
                                         return(
                                             <div key={i} className="flex space-x-1.5 ">
                                             <div onClick={() => handleClick(textArr[i]!.text,textArr[i]!.id)} key={i} className="relative flex flex-col justify-center items-center bg-puddlePurple w-96
@@ -127,7 +126,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                     <button className={`bg-puddlePurple p-2 w-40 hover:text-red-400`} onClick={() => handleChange("del")} >Delete mode?</button>
                                     <button className={`bg-puddlePurple p-2 w-40 hover:text-green-400`} onClick={() => handleChange("edit")} >Edit mode?</button>
                                 </div>
-                                <button className={`bg-puddlePurple p-2 w-40 hover:text-orange-300`} onClick={() => void router.push({pathname:"groupSelect", query:{pwd:ctx.pwd,}},"groupSelect")} >Return</button>
+                                <button className={`bg-puddlePurple p-2 w-40 hover:text-orange-300`} onClick={() => void router.push({pathname:"groupSelect", },"groupSelect")} >Return</button>
                             </div>
                             )
                             :
@@ -140,20 +139,9 @@ const PasteSelect: FC<ctx> = (ctx) => {
 }
 
 export const getServerSideProps = (context:GetServerSidePropsContext) => {
-    const password = process.env.PASSWORD;
-
-    if(context.query.pwd !== password){
-        return {
-            redirect: {
-                destination: '/stop',
-                permanent: false,
-            },
-        }
-    }
 
     return({
         props:{
-            pwd:password,
             group:context.query.group,
         }
     })

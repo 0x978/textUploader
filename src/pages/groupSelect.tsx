@@ -1,14 +1,12 @@
 import {FC, useEffect, useState} from "react"
 import {api} from "~/utils/api";
-import {post} from ".prisma/client";
+import {paste} from ".prisma/client";
 import {GetServerSidePropsContext} from "next";
 import {useRouter} from "next/router";
+import { useSession } from "next-auth/react";
 
-interface ctx{
-    pwd:string
-}
 
-const GroupSelect: FC<ctx> = (ctx) => {
+const GroupSelect: FC = () => {
 
     const router = useRouter()
 
@@ -17,22 +15,23 @@ const GroupSelect: FC<ctx> = (ctx) => {
     const [groupMap,setGroupMap] = useState<Map<string,number>>()
     const pageSize = 5;
     const [minPageSize,setMinPageSize] = useState<number>(0)
-
+    const {data: session} = useSession()
 
 
     const redirect = (group:string) => { // redirects user to paste selection when a group is selected.
         void router.push({
             pathname:"pasteSelect",
             query:{
-                pwd:ctx.pwd,
                 group:group
             }
         },"pasteSelect")
 
     }
 
-    const { data: textData,isLoading } = api.text.getAllText.useQuery<post[]>(undefined,{ // fetches all texts, parsing their groups to display each available group. This is not sustainable
-        onSuccess(res:post[]){
+    const { data: textData,isLoading } = api.text.getAllText.useQuery<paste[]>({
+        userID:session?.user.id
+    },{ // fetches all texts, parsing their groups to display each available group. This is not sustainable
+        onSuccess(res:paste[]){
             const uniqueGroup = new Map<string,number>();
             res.forEach(r => {
                 const count = uniqueGroup.get(r.group);
@@ -56,9 +55,9 @@ const GroupSelect: FC<ctx> = (ctx) => {
                 <div className="m-auto">
 
                     <h1 className="font-bold text-3xl my-5 ">Select a category</h1>
-                    <button onClick={() => void router.push({pathname:"submit",query:{pwd:ctx.pwd}},"submit")}
+                    <button onClick={() => void router.push({pathname:"submit"},"submit")}
                             className="bg-puddlePurple w-44 hover:text-green-300 active:translate-y-1 active:text-green-500 py-2 px-4">
-                        Create new post
+                        Create new paste
                     </button>
 
                     {isLoading ? // if fetching categories, display as such.
@@ -88,24 +87,6 @@ const GroupSelect: FC<ctx> = (ctx) => {
     )
 }
 
-export const getServerSideProps = (context:GetServerSidePropsContext) => {
-    const password = process.env.PASSWORD;
 
-    if(context.query.pwd !== process.env.PASSWORD){
-        return {
-            redirect: {
-                destination: '/stop',
-                permanent: false,
-            },
-        }
-    }
-
-    return({
-        props:{
-            pwd:password
-        }
-    })
-
-}
 
 export default GroupSelect
