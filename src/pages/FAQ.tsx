@@ -32,7 +32,7 @@ const FAQ: FC = ({}) => {
           I will probably make a feature eventually which allows pastes to be private <br />
           Pastes are not encrypted, so please do not upload any passwords to sites you use <br />
           <a className={"cursor-pointer text-green-400 underline"}
-             href={"text.0x978.com/rawPasteDisplay?id=clg1ezvg30007wyk0zbbbdjqe"}>You can view a paste here</a>
+             href={"/rawPasteDisplay?id=clg1ezvg30007wyk0zbbbdjqe"}>You can view a paste here</a>
         </text>
 
         <h1 className={"text-contrastingBlue"}>Can I store images if I point shareX to your API?</h1>
