@@ -30,10 +30,9 @@ const PasteMetadata: FC<PasteMetadataProps> = ({fetchedPaste,handleTitleUpdate,s
             <h1>Group: {fetchedPaste.group ? fetchedPaste.group : "None"}</h1>
 
             <div className="flex flex-col items-center space-y-3">
-                <button className="bg-puddlePurple w-36 active:translate-y-1 " onClick={() => void handleTitleUpdate()}>Change Title</button>
-                <button className="bg-puddlePurple w-36 active:translate-y-1 " onClick={() => void setEditGroupMode(true)}>Change Group</button>
-                <button className="bg-puddlePurple w-36 active:translate-y-1 " onClick={() => handleEditText()}>Edit Text</button>
-
+                <button className="bg-puddlePurple w-36 active:translate-y-1 p-1 " onClick={() => void handleTitleUpdate()}>Change Title</button>
+                <button className="bg-puddlePurple w-36 active:translate-y-1 p-1 " onClick={() => void setEditGroupMode(true)}>Change Group</button>
+                <button className="bg-puddlePurple w-36 active:translate-y-1 p-1 " onClick={() => handleEditText()}>Edit Text</button>
             </div>
         </div>
     )

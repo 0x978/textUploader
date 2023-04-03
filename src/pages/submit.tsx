@@ -3,18 +3,21 @@ import {useRouter} from "next/router";
 import {GetServerSidePropsContext} from "next";
 import {api} from "~/utils/api";
 import {paste} from ".prisma/client";
-import { useSession } from "next-auth/react";
+import { getServerAuthSession } from "~/server/auth";
 
+interface SubmitProps {
+    user: {
+        id: string;
+        name: string;
+        email: string;
+    };
+}
 
-const Submit: FC = () => {
+const Submit: FC<SubmitProps> = ({ user }) => {
     const router = useRouter()
     const [title, setTitle] = useState<string>("")
     const [group, setGroup] = useState<string>("")
     const [text, setText] = useState<string>("")
-    const {data: session} = useSession()
-
-    console.log(session?.user.id)
-
 
     const {mutate:submitPaste} = api.text.submitPost.useMutation<paste>()
 
@@ -32,7 +35,7 @@ const Submit: FC = () => {
             title:title,
             group:parsedGroup,
             text:text,
-            userID:session?.user.id
+            userID:user.id
         })
     }
 
@@ -58,6 +61,26 @@ const Submit: FC = () => {
     )
 }
 
+export async function getServerSideProps(ctx: GetServerSidePropsContext) { // cant get middleware to work, so this will do for now
+    const auth = await getServerAuthSession(ctx);
+
+    if (!auth) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+
+    const user = auth.user
+
+    return {
+        props: {
+            user
+        },
+    }
+}
 
 
 export default Submit

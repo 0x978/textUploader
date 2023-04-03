@@ -6,10 +6,17 @@ import { GetServerSidePropsContext } from "next";
 import { paste } from ".prisma/client";
 import EditGroupSelect from "~/components/editGroupSelect";
 import PasteMetadata from "~/components/pasteMetadata";
+import { getServerAuthSession } from "~/server/auth";
 
+interface editProps{
+    user: {
+        id: string;
+        name: string;
+        email: string;
+    };
+}
 
-
-const Edit: FC = () => {
+const Edit: FC<editProps> = ({user}) => {
     const router = useRouter()
     const [editGroupMode, setEditGroupMode] = useState<boolean>(false)
     const { mutate: updateTitle } = api.text.updateTitle.useMutation()
@@ -22,17 +29,7 @@ const Edit: FC = () => {
         textID: id
     });
 
-    const { data: textData, isLoading } = api.text.getAllText.useQuery<paste[]>(undefined, {
-        onSuccess(res: paste[]) {
-            const uniqueGroup = new Map<string, number>();
-            res.forEach(r => {
-                const count = uniqueGroup.get(r.group);
-                uniqueGroup.set(r.group, (count ? count + 1 : 1));
-            });
-            setGroups(Array.from(uniqueGroup.keys()))
-        }
-    })
-
+    console.log(groups)
 
     const handleTitleUpdate = async (): Promise<void> => {
         const { value: newTitle } = await Swal.fire<string>({
@@ -49,6 +46,20 @@ const Edit: FC = () => {
             fetchedPaste!.title = newTitle
         }
     }
+
+    const { data: textData } = api.text.getAllText.useQuery<paste[]>({
+        userID: user.id
+    }, {
+        onSuccess(res: paste[]) {
+            const uniqueGroup = new Map<string, number>();
+            res.forEach(r => {
+                const count = uniqueGroup.get(r.group);
+                uniqueGroup.set(r.group, (count ? count + 1 : 1));
+            });
+            setGroups(Array.from(uniqueGroup.keys()))
+        }
+    })
+
 
     const handleNewGroup = async () => {
         const { value: newGroup } = await Swal.fire<string>({
@@ -80,14 +91,14 @@ const Edit: FC = () => {
                     {fetchedPaste ? ( // if successfully fetched current paste properties:
                         <div>
                             {editGroupMode ? // if user is currently in group edit mode, show group edit GUI.
-                                <div>
+                                <div className={"space-y-3"}>
                                     <EditGroupSelect groups={groups} fetchedPaste={fetchedPaste} handleNewGroup={handleNewGroup} handleGroupChange={handleGroupChange} />
                                     <button className="bg-puddlePurple w-24 hover:text-red-400 active:translate-y-1" onClick={() => setEditGroupMode(false)}>Return</button>
                                 </div>
                                 : // if user is not currently in group edit mode, show the pastes' metadata
                                 <div>
                                     <PasteMetadata fetchedPaste={fetchedPaste} handleTitleUpdate={handleTitleUpdate} setEditGroupMode={setEditGroupMode} />
-                                    <button className="bg-puddlePurple w-24 hover:text-red-400 my-3 active:translate-y-1" onClick={() => void router.push({ pathname: "pasteSelect", query: { group: fetchedPaste.group } }, "home")}>Return</button>
+                                    <button className="bg-puddlePurple p-1 w-32 hover:text-red-400 my-3 active:translate-y-1" onClick={() => void router.push({ pathname: "pasteSelect", query: { group: fetchedPaste.group } })}>Return</button>
                                 </div>
                             }
                         </div>
@@ -97,6 +108,27 @@ const Edit: FC = () => {
             </div>
         </main>
     )
+}
+
+export async function getServerSideProps(ctx: GetServerSidePropsContext) { // cant get middleware to work, so this will do for now
+    const auth = await getServerAuthSession(ctx);
+
+    if (!auth) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+
+    const user = auth.user
+
+    return {
+        props: {
+            user
+        },
+    }
 }
 
 

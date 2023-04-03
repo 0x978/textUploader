@@ -4,10 +4,15 @@ import {api} from "~/utils/api";
 import type {paste} from ".prisma/client";
 import Head from "next/head";
 import {useRouter} from "next/router";
-import { useSession } from "next-auth/react";
+import { getServerAuthSession } from "~/server/auth";
 
 interface ctx{
     group:string,
+    user: {
+        id: string;
+        name: string;
+        email: string;
+    };
 }
 
 const PasteSelect: FC<ctx> = (ctx) => {
@@ -17,11 +22,10 @@ const PasteSelect: FC<ctx> = (ctx) => {
     const [deleteMode,setDeleteMode] = useState<boolean>(false)
     const [editMode,setEditMode] = useState<boolean>(false)
     const [style,setStyle] = useState<string>("text-superCoolEdgyPurple")
-    const {data: session} = useSession()
 
     const { data: textData } = api.text.getAllTextByGroup.useQuery<paste[]>({
         group: ctx.group,
-        userID: session?.user.id
+        userID: ctx.user.id
     })
 
     const {mutate: deleteItem} = api.text.deleteText.useMutation({onSuccess(deletedPost){
@@ -55,7 +59,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 query:{
                     id:id,
                 }
-            }," ")
+            })
         }
     }
 
@@ -138,14 +142,27 @@ const PasteSelect: FC<ctx> = (ctx) => {
     </>
 }
 
-export const getServerSideProps = (context:GetServerSidePropsContext) => {
+export async function getServerSideProps(ctx: GetServerSidePropsContext) { // cant get middleware to work, so this will do for now
+    const auth = await getServerAuthSession(ctx);
 
+    if (!auth) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        }
+    }
+
+    const user = auth.user
     return({
         props:{
-            group:context.query.group,
+            group:ctx.query.group,
+            user
         }
     })
 
 }
+
 
 export default PasteSelect

@@ -8,6 +8,7 @@ const config = {
         deepPurple:"#17101a",
         shallowPurple:"#31233a",
         puddlePurple:"#433151",
+        contrastingBlue:"#53caf5",
       }
     },
   },
