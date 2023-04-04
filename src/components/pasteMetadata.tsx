@@ -17,10 +17,13 @@ const PasteMetadata: FC<PasteMetadataProps> = ({fetchedPaste,handleTitleUpdate,s
         void router.push({
             pathname:"/textEdit",
             query:{
-                id:fetchedPaste.id
+                id:fetchedPaste.id,
+                pasteUser: fetchedPaste.userID
             }
         })
     }
+
+    console.log(fetchedPaste)
 
     return(
         <div className="space-y-2">

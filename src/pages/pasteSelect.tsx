@@ -1,13 +1,13 @@
-import {type FC, useEffect, useState} from "react"
-import type {GetServerSidePropsContext} from "next";
-import {api} from "~/utils/api";
-import type {paste} from ".prisma/client";
+import { type FC, useEffect, useState } from "react";
+import type { GetServerSidePropsContext } from "next";
+import { api } from "~/utils/api";
+import type { paste } from ".prisma/client";
 import Head from "next/head";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import { getServerAuthSession } from "~/server/auth";
 
-interface ctx{
-    group:string,
+interface ctx {
+    group: string,
     user: {
         id: string;
         name: string;
@@ -16,78 +16,76 @@ interface ctx{
 }
 
 const PasteSelect: FC<ctx> = (ctx) => {
-    const router = useRouter()
-    const [min,setMin] = useState<number>(0)
-    const [textArr,setTextArr] = useState<paste[]>([])
-    const [deleteMode,setDeleteMode] = useState<boolean>(false)
-    const [editMode,setEditMode] = useState<boolean>(false)
-    const [style,setStyle] = useState<string>("text-superCoolEdgyPurple")
+    const router = useRouter();
+    const [min, setMin] = useState<number>(0);
+    const [textArr, setTextArr] = useState<paste[]>([]);
+    const [deleteMode, setDeleteMode] = useState<boolean>(false);
+    const [editMode, setEditMode] = useState<boolean>(false);
+    const [style, setStyle] = useState<string>("text-superCoolEdgyPurple");
 
     const { data: textData } = api.text.getAllTextByGroup.useQuery<paste[]>({
         group: ctx.group,
         userID: ctx.user.id
-    })
+    });
 
-    const {mutate: deleteItem} = api.text.deleteText.useMutation({onSuccess(deletedPost){
-        setTextArr(prevState => prevState.filter((q) => q.id !== deletedPost.id ))
-        }})
+    const { mutate: deleteItem } = api.text.deleteText.useMutation({
+        onSuccess(deletedPost) {
+            setTextArr(prevState => prevState.filter((q) => q.id !== deletedPost.id));
+        }
+    });
 
     useEffect(() => {
-        if(textData){
-            setTextArr(textData?.slice(min,min+5))
+        if (textData) {
+            setTextArr(textData?.slice(min, min + 5));
         }
-    },[textData,min])
+    }, [textData, min]);
 
-    const handleClick = (text: string,id:string) => {
-        if(deleteMode){
-            deleteItem({id:id})
-            if(textArr.length === 1){
-                setMin(min === 0 ? prevState => prevState+5 : prevState => prevState-5)
+    const handleClick = (text: string, id: string) => {
+        if (deleteMode) {
+            deleteItem({ id: id });
+            if (textArr.length === 1) {
+                setMin(min === 0 ? prevState => prevState + 5 : prevState => prevState - 5);
             }
-        }
-        else if(editMode){
+        } else if (editMode) {
             void router.push({
-                pathname:"edit",
-                query:{
-                    id:id,
+                pathname: "edit",
+                query: {
+                    id: id
                 }
-            })
-        }
-        else{
+            });
+        } else {
             void router.push({
-                pathname:"rawPasteDisplay",
-                query:{
-                    id:id,
+                pathname: "rawPasteDisplay",
+                query: {
+                    id: id
                 }
-            })
+            });
         }
-    }
+    };
 
-    const handleChange = (change:string) =>{ // this sucks but the way tailwind wants to work on Vercel has forced my hand
-        switch (change){
+    const handleChange = (change: string) => { // this sucks but the way tailwind wants to work on Vercel has forced my hand
+        switch (change) {
             case "del":
-                if(deleteMode){
-                    setStyle("text-superCoolEdgyPurple")
-                    setDeleteMode(false)
-                    return
+                if (deleteMode) {
+                    setStyle("text-superCoolEdgyPurple");
+                    setDeleteMode(false);
+                    return;
+                } else {
+                    setStyle("text-red-400");
+                    setDeleteMode(true);
                 }
-                else{
-                    setStyle("text-red-400")
-                    setDeleteMode(true)
-                }
-                break
+                break;
             case "edit":
-                if(editMode){
-                    setStyle("text-superCoolEdgyPurple")
-                    setEditMode(false)
+                if (editMode) {
+                    setStyle("text-superCoolEdgyPurple");
+                    setEditMode(false);
+                } else {
+                    setStyle("text-green-400");
+                    setEditMode(true);
                 }
-                else{
-                    setStyle("text-green-400")
-                    setEditMode(true)
-                }
-                break
+                break;
         }
-    }
+    };
 
 
     return <>
@@ -103,35 +101,52 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 <div className="">
                     {
                         textData ? (
-                            <div className="">
                                 <div className="">
+                                    <div className="">
 
-                                    {textArr.map((paste,i) =>{ // Texts display
-                                        return(
-                                            <div key={i} className="flex space-x-1.5 ">
-                                            <div onClick={() => handleClick(textArr[i]!.text,textArr[i]!.id)} key={i} className="relative flex flex-col justify-center items-center bg-puddlePurple w-96
+                                        {textArr.map((paste, i) => { // Texts display
+                                            return (
+                                                <div key={i} className="flex space-x-1.5 ">
+                                                    <div onClick={() => handleClick(textArr[i]!.text, textArr[i]!.id)}
+                                                         key={i} className="relative flex flex-col justify-center items-center bg-puddlePurple w-96
                                     h-16 rounded-lg my-5 py-2 shadow-lg cursor-pointer hover:scale-110 transition duration-300">
-                                                <h1> {/*If text has title, use that, else: If length of text is over 30, put first 30 chars then "...", else put full string */}
-                                                    {textArr[i]?.title || (textArr[i]!.text?.length > 30 ? `${textArr[i]?.text?.substring(0, 30) as string} ... ` : textArr[i]?.text)}
-                                                </h1>
+                                                        <h1> {/*If text has title, use that, else: If length of text is over 30, put first 30 chars then "...", else put full string */}
+                                                            {textArr[i]?.title || (textArr[i]!.text?.length > 30 ? `${textArr[i]?.text?.substring(0, 30) as string} ... ` : textArr[i]?.text)}
+                                                        </h1>
 
-                                                <h1 className="my-2">{new Date(textArr[i]!.createdAt).toLocaleString()}</h1>
-                                            </div>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                                <div className="my-5 space-x-10 ">
-                                    <button className="w-40 bg-puddlePurple p-2 hover:-translate-y-1 transition duration-300" onClick={() => {if((min-5 >= 0))setMin(prevState => prevState-5)}}>Decrement</button>
-                                    <button className="w-40 bg-puddlePurple p-2  hover:-translate-y-1 transition duration-300" onClick={() => {if((min+5 <= textData.length))setMin(prevState => prevState+5)}}>Increment</button>
-                                </div>
+                                                        <h1 className="my-2">{new Date(textArr[i]!.createdAt).toLocaleString()}</h1>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                    <div className="my-5 space-x-10 ">
+                                        <button
+                                            className="w-40 bg-puddlePurple p-2 hover:-translate-y-1 transition duration-300"
+                                            onClick={() => {
+                                                if ((min - 5 >= 0)) setMin(prevState => prevState - 5);
+                                            }}>Decrement
+                                        </button>
+                                        <button
+                                            className="w-40 bg-puddlePurple p-2  hover:-translate-y-1 transition duration-300"
+                                            onClick={() => {
+                                                if ((min + 5 <= textData.length)) setMin(prevState => prevState + 5);
+                                            }}>Increment
+                                        </button>
+                                    </div>
 
-                                <div className="my-5 space-x-10 ">
-                                    <button className={`bg-puddlePurple p-2 w-40 hover:text-red-400`} onClick={() => handleChange("del")} >Delete mode?</button>
-                                    <button className={`bg-puddlePurple p-2 w-40 hover:text-green-400`} onClick={() => handleChange("edit")} >Edit mode?</button>
+                                    <div className="my-5 space-x-10 ">
+                                        <button className={`bg-puddlePurple p-2 w-40 hover:text-red-400`}
+                                                onClick={() => handleChange("del")}>Delete mode?
+                                        </button>
+                                        <button className={`bg-puddlePurple p-2 w-40 hover:text-green-400`}
+                                                onClick={() => handleChange("edit")}>Edit mode?
+                                        </button>
+                                    </div>
+                                    <button className={`bg-puddlePurple p-2 w-40 hover:text-orange-300`}
+                                            onClick={() => void router.push({ pathname: "groupSelect" }, "groupSelect")}>Return
+                                    </button>
                                 </div>
-                                <button className={`bg-puddlePurple p-2 w-40 hover:text-orange-300`} onClick={() => void router.push({pathname:"groupSelect", },"groupSelect")} >Return</button>
-                            </div>
                             )
                             :
                             <h1>Loading</h1>
@@ -139,8 +154,8 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 </div>
             </div>
         </main>
-    </>
-}
+    </>;
+};
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) { // cant get middleware to work, so this will do for now
     const auth = await getServerAuthSession(ctx);
@@ -148,21 +163,21 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) { // ca
     if (!auth) {
         return {
             redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
+                destination: "/",
+                permanent: false
+            }
+        };
     }
 
-    const user = auth.user
-    return({
-        props:{
-            group:ctx.query.group,
+    const user = auth.user;
+    return ({
+        props: {
+            group: ctx.query.group,
             user
         }
-    })
+    });
 
 }
 
 
-export default PasteSelect
+export default PasteSelect;

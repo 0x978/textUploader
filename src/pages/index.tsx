@@ -1,11 +1,11 @@
 import { GetServerSidePropsContext, type NextPage } from "next";
 import Head from "next/head";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { getServerAuthSession } from "~/server/auth";
 
 const Home: NextPage = () => {
-    const router = useRouter()
+    const router = useRouter();
 
     return (
         <>
@@ -19,9 +19,11 @@ const Home: NextPage = () => {
                 <div className="flex h-screen text-center">
 
                     <div className="m-auto">
-                    <h1 className="font-bold text-3xl my-5">Sign in with an Auth Provider:</h1>
+                        <h1 className="font-bold text-3xl my-5">Sign in with an Auth Provider:</h1>
                         <div className="flex flex-col space-y-2">
-                            <button className={"bg-puddlePurple p-2 text-xl"} onClick={() => void signIn("discord")}>Discord</button>
+                            <button className={"bg-puddlePurple p-2 text-xl"}
+                                    onClick={() => void signIn("discord")}>Discord
+                            </button>
                         </div>
 
                         <div className={"my-5"}>
@@ -33,13 +35,13 @@ const Home: NextPage = () => {
             </main>
 
         </>
-    )
+    );
 };
 
-export async function getServerSideProps(ctx:GetServerSidePropsContext) {
-    const session = await getServerAuthSession(ctx)
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+    const session = await getServerAuthSession(ctx);
 
-    if(session){
+    if (session) {
         return {
             redirect: {
                 destination: "/groupSelect",
@@ -50,8 +52,8 @@ export async function getServerSideProps(ctx:GetServerSidePropsContext) {
 
 
     return {
-        props: { session },
-    }
+        props: { session }
+    };
 }
 
 export default Home;
