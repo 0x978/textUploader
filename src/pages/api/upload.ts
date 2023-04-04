@@ -25,7 +25,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             }
         })
         console.log(paste)
-        res.status(200).json({success:"true",url:"http://localhost:3000/rawPasteDisplay/?id="+paste.id})
+        res.status(200).json({success:"true",url:"https://text.0x978.com/rawPasteDisplay/?id="+paste.id})
     }
     catch (e){
         //console.log(e)
