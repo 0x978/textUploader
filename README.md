@@ -1,28 +1,26 @@
-# Create T3 App
+# Text Uploader
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+https://text.0x978.com/
 
-## What's next? How do I make an app with this?
+A text uploader that allows for the quick upload of text on the fly using ShareX.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+Pastes can then be viewed when the user wishes, as well as the ability to sort them into groups, give them titles or edit them.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+I originally made this just to host my own pastes privately but decided to add auth and make it public.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Features:
+- Paste Uploading via ShareX or manual upload
+- Sorting of pastes via groups
+- Ability to name pastes
+- Ability to edit / delete pastes after upload
+- Pastes can be shared via URL
 
-## Learn More
+## Technologies used
+The stack I used for this project was the T3 stack, this included:
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- Next.js
+- NextAuth.js
+- Prisma
+- Tailwind CSS
+- tRPC
+- Planetscale for database hosting
