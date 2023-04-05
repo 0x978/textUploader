@@ -15,7 +15,7 @@ const RawPasteDisplay: FC<ctx> = (ctx) => {
     const router = useRouter();
     const text = router.query.text;
 
-    const { data: textData } = api.text.getTextByID.useQuery<paste[]>({
+    const { data: textData } = api.text.getPasteByIDPrivate.useQuery<paste[]>({
         textID: ctx.id
     });
 

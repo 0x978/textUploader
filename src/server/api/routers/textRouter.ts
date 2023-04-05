@@ -1,9 +1,8 @@
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 
 export const textRouter = createTRPCRouter({
-
-    getAllText: publicProcedure
+    getAllText: protectedProcedure
         .input(z.object({
             userID: z.string()
         }))
@@ -23,7 +22,7 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
-    getAllTextByGroup: publicProcedure
+    getAllTextByGroup: protectedProcedure
         .input(z.object({
             group: z.string(),
             userID: z.string()
@@ -45,7 +44,7 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
-    deleteText: publicProcedure
+    deleteText: protectedProcedure
         .input(z.object({
             id: z.string()
         }))
@@ -62,7 +61,7 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
-    getTextByID: publicProcedure
+    getTextByID: protectedProcedure
         .input(z.object({
             textID: z.string()
         }))
@@ -79,7 +78,29 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
-    updateTitle: publicProcedure
+    getPasteByIDPrivate: publicProcedure
+        .input(z.object({
+            textID: z.string()
+        }))
+        .query(async ({ input: { textID }, ctx: { prisma } }) => {
+            try {
+                return await prisma.paste.findUnique({
+                    where: {
+                        id: textID
+                    },
+                    select:{
+                        text:true,
+                        title:true,
+                        createdAt:true,
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+                throw new Error("Failed to fetch");
+            }
+        }),
+
+    updateTitle: protectedProcedure
         .input(z.object({
             id: z.string(),
             title: z.string()
@@ -100,7 +121,7 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
-    updateText: publicProcedure
+    updateText: protectedProcedure
         .input(z.object({
             id: z.string(),
             text: z.string()
@@ -121,7 +142,7 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
-    submitPost: publicProcedure
+    submitPost: protectedProcedure
         .input(z.object({
             title: z.string(),
             group: z.string(),
@@ -144,7 +165,7 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
-    updateGroup: publicProcedure
+    updateGroup: protectedProcedure
         .input(z.object({
             id: z.string(),
             group: z.string()
