@@ -184,6 +184,26 @@ export const textRouter = createTRPCRouter({
                 console.error(error);
                 throw new Error("Failed to fetch");
             }
-        })
+        }),
+
+    getUserKeyByID: protectedProcedure
+        .input(z.object({
+            userID: z.string()
+        }))
+        .query(async ({ input: { userID }, ctx: { prisma } }) => {
+            try {
+                return await prisma.user.findUnique({
+                    where: {
+                        id: userID
+                    },
+                    select:{
+                        key:true,
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+                throw new Error("Failed to fetch");
+            }
+        }),
 
 });

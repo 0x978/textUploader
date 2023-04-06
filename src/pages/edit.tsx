@@ -35,7 +35,9 @@ const Edit: FC<editProps> = ({ user }) => {
         const { value: newTitle } = await Swal.fire<string>({
             title: "Enter a new title",
             icon: "question",
-            input: "text"
+            input: "text",
+            background:"#433151",
+            color:"#9e75f0",
         });
 
         if (newTitle) {
@@ -65,7 +67,9 @@ const Edit: FC<editProps> = ({ user }) => {
         const { value: newGroup } = await Swal.fire<string>({
             title: "Enter a new group",
             icon: "question",
-            input: "text"
+            input: "text",
+            background:"#433151",
+            color:"#9e75f0",
         });
 
         if (newGroup) {

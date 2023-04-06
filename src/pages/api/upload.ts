@@ -1,4 +1,4 @@
-import {PrismaClient} from "@prisma/client";
+import {PrismaClient } from "@prisma/client";
 import type {NextApiRequest, NextApiResponse} from "next";
 const prisma = new PrismaClient()
 import {z} from "zod"
@@ -7,10 +7,13 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
     const {text,key} = req.body as { text: string,key:string }// TODO verify key
 
-    if(!await checkUserExists(key)){
+    const userID = await findUserIDFromKey(key);
+
+    if(!userID){
         res.status(403).send({
             error:"Failed to find user, please check key."
         })
+        return
     }
 
     const type = z.string()
@@ -20,11 +23,10 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
         const paste = await prisma.paste.create({
             data:{
-                userID:key,
+                userID:userID,
                 text:data,
             }
         })
-        console.log(paste)
         res.status(200).json({success:"true",url:"https://text.0x978.com/rawPasteDisplay/?id="+paste.id})
     }
     catch (e){
@@ -35,20 +37,25 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     }
 }
 
-async function checkUserExists(key:string):Promise<boolean>{
+async function findUserIDFromKey(key:string):Promise<string | undefined>{
     try{
-        const user = await prisma.user.findUnique({
+        const userID = await prisma.user.findUnique({
             where:{
-                id:key
+                key:key
+            },
+            select:{
+                id:true
             }
         })
-        if(!user){
-            return false
+        if(!userID){
+            return undefined
+        }
+        else{
+            return userID.id
         }
     }
     catch (e){
-        return false;
+        console.log(e)
+        return undefined;
     }
-
-    return true;
 }

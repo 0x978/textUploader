@@ -2,6 +2,8 @@ import { FC } from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
+import { api } from "~/utils/api";
+import Swal from "sweetalert2"
 
 interface ShareXInstructionsProps {
     user: {
@@ -15,19 +17,44 @@ interface ShareXInstructionsProps {
 const ShareXInstructions: FC<ShareXInstructionsProps> = ({ user }) => {
     const router = useRouter()
 
+    const { data: userKey } = api.text.getUserKeyByID.useQuery<string>({ // Gets user key
+        userID: user.id
+    })
+
     function copyConfig() {
-        const config = `{
+        if(userKey ){
+            const config = `{
   "Version": "14.1.0",
-  "Name": "0x978",
+  "Name": "0x978-Text-Uploader",
   "DestinationType": "TextUploader",
   "RequestMethod": "POST",
   "RequestURL": "https://text.0x978.com/api/upload",
   "Body": "JSON",
-  "Data": "{\\n  \\"text\\": \\"{input}\\",\\n  \\"key\\": \\"${user.id}\\"\\n}",
+  "Data": "{\\n  \\"text\\": \\"{input}\\",\\n  \\"key\\": \\"${userKey?.key.trim()}\\"\\n}", 
   "URL": "{json:url}",
   "ErrorMessage": "{json:error}"
 }`;
-        void navigator.clipboard.writeText(config);
+            void Swal.fire({
+                toast:true,
+                text:"Copied to clipboard",
+                showConfirmButton:false,
+                timer:1000,
+                background:"#433151",
+                color:"#9e75f0",
+                icon:"success",
+                position:"top"
+            })
+            void navigator.clipboard.writeText(config);
+        }
+        else{
+            void Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                background:"#433151",
+                color:"#9e75f0",
+                confirmButtonColor: "#9e75f0",
+                text: 'Failed to fetch key, try logging out and back in again ' })
+        }
     }
 
 

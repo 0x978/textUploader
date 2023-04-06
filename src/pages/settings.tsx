@@ -3,6 +3,7 @@ import { getServerAuthSession } from "~/server/auth";
 import { GetServerSidePropsContext } from "next";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { api } from "~/utils/api";
 
 interface SettingsProps {
     user: {
@@ -15,6 +16,10 @@ interface SettingsProps {
 const Settings: FC<SettingsProps> = ({ user }) => {
     const router = useRouter();
     const [toggleKey, setToggleKey] = useState<boolean>(false);
+
+    const { data: userKey } = api.text.getUserKeyByID.useQuery<string>({ // Gets user key
+        userID: user.id
+    })
 
 
     async function logout() {
@@ -35,7 +40,11 @@ const Settings: FC<SettingsProps> = ({ user }) => {
 
                     <div className={"my-2"}>
                         {toggleKey ?
-                            <h1>{user.id}</h1> :
+                            <div className={"my-5 space-y-3"}>
+                                <h1>Do not share this key with anyone, as it allows people to upload pastes as you!</h1>
+                                <h1>{userKey ? userKey.key : "Failed to fetch key"}</h1>
+                            </div>:
+
                             <button onClick={() => setToggleKey(true)} className={"bg-puddlePurple p-2 "}>Show
                                 Key </button>}
                     </div>
