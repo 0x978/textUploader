@@ -4,6 +4,9 @@ import { GetServerSidePropsContext } from "next";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
+import { paste } from ".prisma/client";
+import { nanoid } from "nanoid";
+import Swal from "sweetalert2";
 
 interface SettingsProps {
     user: {
@@ -16,15 +19,44 @@ interface SettingsProps {
 const Settings: FC<SettingsProps> = ({ user }) => {
     const router = useRouter();
     const [toggleKey, setToggleKey] = useState<boolean>(false);
+    const [key, setKey] = useState<string>("Loading...");
+
 
     const { data: userKey } = api.text.getUserKeyByID.useQuery<string>({ // Gets user key
         userID: user.id
-    })
+    }, {
+        onSuccess: () => {
+            if (userKey) {
+                setKey(userKey?.key);
+            }
+        }
+    });
+
+    const { mutate: editKey } = api.text.updateKey.useMutation<paste>();
 
 
     async function logout() {
         await signOut().then(_ => {
             void router.push("/");
+        });
+    }
+
+    function handleChangeKey() {
+        const newKey = nanoid();
+        editKey({
+            id: user.id,
+            key: newKey
+        });
+        setKey(newKey)
+        void Swal.fire({
+            toast: true,
+            text: "Reset Key",
+            showConfirmButton: false,
+            timer: 1000,
+            background: "#433151",
+            color: "#9e75f0",
+            icon: "success",
+            position: "top"
         });
     }
 
@@ -42,8 +74,8 @@ const Settings: FC<SettingsProps> = ({ user }) => {
                         {toggleKey ?
                             <div className={"my-5 space-y-3"}>
                                 <h1>Do not share this key with anyone, as it allows people to upload pastes as you!</h1>
-                                <h1>{userKey ? userKey.key : "Failed to fetch key"}</h1>
-                            </div>:
+                                <h1>{userKey ? key : "Failed to fetch key"}</h1>
+                            </div> :
 
                             <button onClick={() => setToggleKey(true)} className={"bg-puddlePurple p-2 "}>Show
                                 Key </button>}
@@ -52,7 +84,13 @@ const Settings: FC<SettingsProps> = ({ user }) => {
                 </div>
 
 
-                <div className={"flex flex-col items-center space-y-3"}>
+                <div className={"flex flex-col items-center py-2 space-y-4"}>
+
+                    <button
+                        className={"bg-fadedRed text-blue-200  w-40 p-2 hover:text-emerald-400 active:translate-y-1.5"}
+                        onClick={() => void handleChangeKey()}>Reset Key
+                    </button>
+
                     <button className={"bg-puddlePurple w-40 p-2 hover:text-red-300 active:translate-y-1.5"}
                             onClick={() => void logout()}>Logout
                     </button>

@@ -186,6 +186,27 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
+    updateKey: protectedProcedure
+        .input(z.object({
+            id: z.string(),
+            key: z.string(),
+        }))
+        .mutation(async ({ input: { id,key}, ctx: { prisma } }) => {
+            try {
+                return await prisma.user.update({
+                    where: {
+                        id: id
+                    },
+                    data: {
+                        key: key
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+                throw new Error("Failed to fetch");
+            }
+        }),
+
     getUserKeyByID: protectedProcedure
         .input(z.object({
             userID: z.string()
