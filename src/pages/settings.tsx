@@ -19,17 +19,11 @@ interface SettingsProps {
 const Settings: FC<SettingsProps> = ({ user }) => {
     const router = useRouter();
     const [toggleKey, setToggleKey] = useState<boolean>(false);
-    const [key, setKey] = useState<string>("Loading...");
+    const [modifiedKey,setModifiedKey] = useState<string>()
 
 
     const { data: userKey } = api.text.getUserKeyByID.useQuery<string>({ // Gets user key
         userID: user.id
-    }, {
-        onSuccess: () => {
-            if (userKey) {
-                setKey(userKey?.key);
-            }
-        }
     });
 
     const { mutate: editKey } = api.text.updateKey.useMutation<paste>();
@@ -47,7 +41,8 @@ const Settings: FC<SettingsProps> = ({ user }) => {
             id: user.id,
             key: newKey
         });
-        setKey(newKey)
+        setModifiedKey(newKey)
+        setToggleKey(false)
         void Swal.fire({
             toast: true,
             text: "Reset Key",
@@ -74,7 +69,7 @@ const Settings: FC<SettingsProps> = ({ user }) => {
                         {toggleKey ?
                             <div className={"my-5 space-y-3"}>
                                 <h1>Do not share this key with anyone, as it allows people to upload pastes as you!</h1>
-                                <h1>{userKey ? key : "Failed to fetch key"}</h1>
+                                <h1>{userKey && !modifiedKey ? userKey.key : modifiedKey}</h1>
                             </div> :
 
                             <button onClick={() => setToggleKey(true)} className={"bg-puddlePurple p-2 "}>Show

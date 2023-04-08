@@ -19,15 +19,23 @@ const Home: NextPage = () => {
                 <div className="flex h-screen text-center">
 
                     <div className="m-auto">
-                        <h1 className="font-bold text-3xl my-5">Sign in with an Auth Provider:</h1>
+                        <h1 className="font-bold text-4xl my-5">ShareX Text Uploader</h1>
+
+                        <h1 className="font-bold text-2xl my-5">Please sign in with an Auth Provider:</h1>
                         <div className="flex flex-col space-y-2">
                             <button className={"bg-puddlePurple p-2 text-xl"}
                                     onClick={() => void signIn("discord")}>Discord
                             </button>
+                            <button className={"bg-puddlePurple p-2 text-xl"}
+                                    onClick={() => void signIn("github")}>GitHub
+                            </button>
+                            <button className={"bg-puddlePurple p-2 text-xl"}
+                                    onClick={() => void signIn("google")}>Google
+                            </button>
                         </div>
 
-                        <div className={"my-5"}>
-                            <button onClick={() => void router.push("FAQ")}>FAQ</button>
+                        <div className={"my-10 text-xl bg-puddlePurple cursor-pointer"} onClick={() => void router.push("FAQ")} >
+                            FAQ
                         </div>
                     </div>
                 </div>
