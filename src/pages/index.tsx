@@ -22,6 +22,7 @@ const Home: NextPage = () => {
                         <h1 className="font-bold text-4xl my-5">ShareX Text Uploader</h1>
 
                         <h1 className="font-bold text-2xl my-5">Please sign in with an Auth Provider:</h1>
+
                         <div className="flex flex-col space-y-2">
                             <button className={"bg-puddlePurple p-2 text-xl"}
                                     onClick={() => void signIn("discord")}>Discord
@@ -33,6 +34,15 @@ const Home: NextPage = () => {
                                     onClick={() => void signIn("google")}>Google
                             </button>
                         </div>
+
+                        <div className={"flex flex-col"}>
+                            <h1 className="font-bold text-2xl my-5">Or Submit a paste without an account:</h1>
+                            <button className={"bg-puddlePurple p-2 text-xl"}
+                                    onClick={() => void router.push("/anonSubmit")}>Submit
+                            </button>
+                        </div>
+
+
 
                         <div className={"my-10 text-xl bg-puddlePurple cursor-pointer"} onClick={() => void router.push("FAQ")} >
                             FAQ

@@ -72,6 +72,6 @@ model paste {
   createdAt DateTime @default(now())
   text      String   @db.Text
   group     String   @default("none") @db.Text
-  author    User     @relation(fields: [userID], references: [id], onDelete: Cascade)
-  userID    String
+  author    User?    @relation(fields: [userID], references: [id], onDelete: Cascade)
+  userID    String?
 }

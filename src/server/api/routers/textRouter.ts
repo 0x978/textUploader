@@ -142,7 +142,7 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
-    submitPost: protectedProcedure
+    submitPost: publicProcedure
         .input(z.object({
             title: z.string(),
             group: z.string(),
