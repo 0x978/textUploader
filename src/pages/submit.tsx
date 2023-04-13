@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import { paste } from ".prisma/client";
 import { getServerAuthSession } from "~/server/auth";
 import SubmitPasteForm from "~/components/submitPasteForm";
+import swal from "sweetalert2";
 
 interface SubmitProps {
     user: {
@@ -17,7 +18,23 @@ interface SubmitProps {
 const Submit: FC<SubmitProps> = ({ user }) => {
     const router = useRouter();
 
-    const { mutate: submitPaste } = api.text.submitPost.useMutation<paste>();
+    const { mutate: submitPaste } = api.text.submitPost.useMutation<paste>(
+        {
+            onSuccess: (data) => {
+                void swal.fire({
+                    title:"Post successfully submitted!",
+                    text: "Redirecting...",
+                    icon:"success",
+                    timer: 1300,
+                    showConfirmButton: false,
+                    background:"#433151",
+                    color:"#9e75f0",
+                }).then((_) => {
+                    void router.push("rawPasteDisplay?id=" + data.id);
+                });
+            }
+        }
+    );
 
     const handleSubmit = (e: MouseEvent<HTMLButtonElement>,title:string,group:string,text:string) => {
         e.preventDefault();

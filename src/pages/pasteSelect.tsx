@@ -5,6 +5,7 @@ import type { paste } from ".prisma/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { getServerAuthSession } from "~/server/auth";
+import Swal from "sweetalert2";
 
 interface ctx {
     group: string,
@@ -30,6 +31,16 @@ const PasteSelect: FC<ctx> = (ctx) => {
 
     const { mutate: deleteItem } = api.text.deleteText.useMutation({
         onSuccess(deletedPost) {
+            void Swal.fire({
+                title:"Post successfully Deleted",
+                position:"top",
+                toast:true,
+                icon:"success",
+                timer: 1500,
+                showConfirmButton: false,
+                background:"#433151",
+                color:"#9e75f0",
+            })
             setTextArr(prevState => prevState.filter((q) => q.id !== deletedPost.id));
         }
     });
@@ -42,10 +53,24 @@ const PasteSelect: FC<ctx> = (ctx) => {
 
     const handleClick = (text: string, id: string) => {
         if (deleteMode) {
-            deleteItem({ id: id });
-            if (textArr.length === 1) {
-                setMin(min === 0 ? prevState => prevState + 5 : prevState => prevState - 5);
-            }
+            void Swal.fire({
+                title: 'Delete Paste?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Confirm Deletion',
+                background:"#433151",
+                color:"#9e75f0",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteItem({ id: id });
+                    if (textArr.length === 1) {
+                        setMin(min === 0 ? prevState => prevState + 5 : prevState => prevState - 5);
+                    }
+                }
+            })
         } else if (editMode) {
             void router.push({
                 pathname: "edit",
@@ -73,6 +98,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 } else {
                     setStyle("text-red-400");
                     setDeleteMode(true);
+                    setEditMode(false)
                 }
                 break;
             case "edit":
@@ -82,6 +108,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 } else {
                     setStyle("text-green-400");
                     setEditMode(true);
+                    setDeleteMode(false)
                 }
                 break;
         }
@@ -102,8 +129,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                     {
                         textData ? (
                                 <div className="">
-                                    <div className="">
-
+                                    <div className="h-[53vh]">
                                         {textArr.map((paste, i) => { // Texts display
                                             return (
                                                 <div key={i} className="flex space-x-1.5 ">
@@ -130,7 +156,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                         <button
                                             className="w-40 bg-puddlePurple p-2  hover:-translate-y-1 transition duration-300"
                                             onClick={() => {
-                                                if ((min + 5 <= textData.length)) setMin(prevState => prevState + 5);
+                                                if ((min + 5 < textData.length)) setMin(prevState => prevState + 5);
                                             }}>Increment
                                         </button>
                                     </div>

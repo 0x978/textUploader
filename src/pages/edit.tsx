@@ -29,7 +29,6 @@ const Edit: FC<editProps> = ({ user }) => {
         textID: id
     });
 
-    console.log(groups);
 
     const handleTitleUpdate = async (): Promise<void> => {
         const { value: newTitle } = await Swal.fire<string>({

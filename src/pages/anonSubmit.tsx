@@ -3,6 +3,7 @@ import SubmitPasteForm from "~/components/submitPasteForm";
 import { api } from "~/utils/api";
 import { paste } from ".prisma/client";
 import { useRouter } from "next/router";
+import swal from "sweetalert2";
 
 
 const AnonSubmit: FC = () => {
@@ -10,7 +11,17 @@ const AnonSubmit: FC = () => {
     const { mutate: submitPaste } = api.text.submitPost.useMutation<paste>(
         {
             onSuccess: (data) => {
-                void router.push("rawPasteDisplay?id=" + data.id);
+                void swal.fire({
+                    title:"Post successfully submitted!",
+                    text: "Redirecting...",
+                    icon:"success",
+                    timer: 1300,
+                    showConfirmButton: false,
+                    background:"#433151",
+                    color:"#9e75f0",
+                }).then((_) => {
+                    void router.push("rawPasteDisplay?id=" + data.id);
+                });
             }
         }
     );
