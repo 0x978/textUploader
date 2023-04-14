@@ -7,6 +7,7 @@ import { api } from "~/utils/api";
 import { paste } from ".prisma/client";
 import { nanoid } from "nanoid";
 import Swal from "sweetalert2";
+import ReusableButton from "~/components/reusableButton";
 
 interface SettingsProps {
     user: {
@@ -72,8 +73,7 @@ const Settings: FC<SettingsProps> = ({ user }) => {
                                 <h1>{userKey && !modifiedKey ? userKey.key : modifiedKey}</h1>
                             </div> :
 
-                            <button onClick={() => setToggleKey(true)} className={"bg-puddlePurple p-2 "}>Show
-                                Key </button>}
+                            <ReusableButton text={"Show Key"} onClick={() => setToggleKey(true)}  />}
                     </div>
 
                 </div>
@@ -81,17 +81,9 @@ const Settings: FC<SettingsProps> = ({ user }) => {
 
                 <div className={"flex flex-col items-center py-2 space-y-4"}>
 
-                    <button
-                        className={"bg-fadedRed text-blue-200  w-40 p-2 hover:text-emerald-400 active:translate-y-1.5"}
-                        onClick={() => void handleChangeKey()}>Reset Key
-                    </button>
-
-                    <button className={"bg-puddlePurple w-40 p-2 hover:text-red-300 active:translate-y-1.5"}
-                            onClick={() => void logout()}>Logout
-                    </button>
-                    <button className={"bg-puddlePurple w-40 p-2 hover:text-green-300 active:translate-y-1.5"}
-                            onClick={() => void router.push("/groupSelect")}>Return
-                    </button>
+                    <ReusableButton text={"Reset Key"} isDangerous={true} onClick={() => handleChangeKey()} />
+                    <ReusableButton text={"Logout"}  onClick={() => void logout()} />
+                    <ReusableButton text={"Return"}  onClick={() => void router.push("/groupSelect")} />
                 </div>
 
             </div>

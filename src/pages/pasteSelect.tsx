@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { getServerAuthSession } from "~/server/auth";
 import Swal from "sweetalert2";
+import ReusableButton from "~/components/reusableButton";
 
 interface ctx {
     group: string,
@@ -162,12 +163,10 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                     </div>
 
                                     <div className="my-5 space-x-10 ">
-                                        <button className={`bg-puddlePurple p-2 w-40 hover:text-red-400`}
-                                                onClick={() => handleChange("del")}>Delete mode?
-                                        </button>
-                                        <button className={`bg-puddlePurple p-2 w-40 hover:text-green-400`}
-                                                onClick={() => handleChange("edit")}>Edit mode?
-                                        </button>
+
+                                        <ReusableButton text={"Delete Mode?"} onClick={() => handleChange("del")} overrideHoverTextColour={"red-300"}/>
+                                        <ReusableButton text={"Edit Mode?"} onClick={() => handleChange("edit")}/>
+
                                     </div>
                                     <button className={`bg-puddlePurple p-2 w-40 hover:text-orange-300`}
                                             onClick={() => void router.push({ pathname: "groupSelect" }, "groupSelect")}>Return

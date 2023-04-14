@@ -3,6 +3,8 @@ import { api } from "~/utils/api";
 import { paste } from ".prisma/client";
 import { GetServerSidePropsContext } from "next";
 import { getServerAuthSession } from "~/server/auth";
+import swal from "sweetalert2";
+import { useRouter } from "next/router";
 
 interface textEditProps {
     id: string,
@@ -13,9 +15,23 @@ interface textEditProps {
     };
 }
 
-const TextEdit: FC<textEditProps> = ({ id,user }) => {
+const TextEdit: FC<textEditProps> = ({ id, user }) => {
+    const router = useRouter()
+
     const [text, setText] = useState<string>("");
-    const { mutate: updateText } = api.text.updateText.useMutation();
+    const { mutate: updateText } = api.text.updateText.useMutation({ onSuccess: (data) => {
+            void swal.fire({
+                title:"Post successfully Edited!",
+                text: "Redirecting...",
+                icon:"success",
+                timer: 1100,
+                showConfirmButton: false,
+                background:"#433151",
+                color:"#9e75f0",
+            }).then((_) => {
+                void router.push("rawPasteDisplay?id=" + data.id);
+            });
+        } });
 
     const { data: textData, isLoading } = api.text.getTextByID.useQuery<paste>({
         textID: id
@@ -72,20 +88,20 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) { // ca
     if (!auth || auth.user.id !== ctx.query.pasteUser) {
         return {
             redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        }
+                destination: "/",
+                permanent: false
+            }
+        };
     }
 
-    const user = auth.user
+    const user = auth.user;
 
     return {
         props: {
             user,
             id: ctx.query.id
-        },
-    }
+        }
+    };
 }
 
 

@@ -5,6 +5,7 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { getServerAuthSession } from "~/server/auth";
 import GroupDisplay from "~/components/groupDisplay";
+import ReusableButton from "~/components/reusableButton";
 
 interface GroupSelectProps {
     user: {
@@ -60,10 +61,8 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
                 <div className="m-auto">
 
                     <h1 className="font-bold text-3xl my-5 ">Select a category</h1>
-                    <button onClick={() => void router.push({ pathname: "submit" }, "submit")}
-                            className="bg-puddlePurple hover:text-green-300 active:translate-y-1 active:text-green-500 py-2 px-4">
-                        Create new paste
-                    </button>
+                    <ReusableButton text={"Create a New Paste"} overrideWidth={60} onClick={() => void router.push("submit")}/>
+
 
                     {isLoading ? // if fetching categories, display as such.
                         <h1> Loading categories... </h1>
@@ -95,12 +94,8 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
                     </div>
 
                     <div className={"space-x-10"}>
-                        <button className={"bg-puddlePurple p-2 active:translate-y-1.5 hover:text-green-300 w-40"}
-                                onClick={() => void router.push("/settings")}>User Settings
-                        </button>
-                        <button className={"bg-puddlePurple p-2 active:translate-y-1.5 hover:text-green-300 w-40"}
-                                onClick={() => void router.push("/shareXInstructions")}>ShareX Steps
-                        </button>
+                        <ReusableButton text={"User Settings"} overrideTextColour={"puddlePurple"} onClick={() => void router.push("/settings")} />
+                        <ReusableButton text={"ShareX Steps"} overrideTextColour={"puddlePurple"} onClick={() => void router.push("/shareXInstructions")} />
                     </div>
 
                 </div>

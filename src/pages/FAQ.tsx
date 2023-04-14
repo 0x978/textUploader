@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { useRouter } from "next/router";
+import ReusableButton from "~/components/reusableButton";
 
 
 const FAQ: FC = ({}) => {
@@ -59,9 +60,7 @@ const FAQ: FC = ({}) => {
 
 
                 <div>
-                    <button className={"bg-puddlePurple text-green-400 w-32 "}
-                            onClick={() => void router.push("/")}>Return
-                    </button>
+                    <ReusableButton text={"Return"} onClick={() => void router.push("/")} isDangerous={true}/>
                 </div>
 
             </div>

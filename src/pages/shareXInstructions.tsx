@@ -4,6 +4,7 @@ import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import Swal from "sweetalert2"
+import ReusableButton from "~/components/reusableButton";
 
 interface ShareXInstructionsProps {
     user: {
@@ -63,10 +64,10 @@ const ShareXInstructions: FC<ShareXInstructionsProps> = ({ user }) => {
             <div className="m-auto space-y-3">
                 <h1 className="text-3xl">ShareX instructions</h1>
                 <h1 className={"text-xl"}>Press the button below to copy config</h1>
-                <button onClick={() => copyConfig()} className="bg-puddlePurple px-3 py-1 hover:text-green-300 active:translate-y-1.5 ">Config</button>
+                <ReusableButton text={"Config"} onClick={() => copyConfig()} />
                 <h1>Then, right click shareX -{">"} custom uploader settings {">"} import {">"} from clipboard</h1>
 
-                <button onClick={() => void router.push("/groupSelect")} className="bg-puddlePurple px-3 py-1 hover:text-red-300 active:translate-y-1.5">Return</button>
+                <ReusableButton text={"Return"} isDangerous={true} onClick={() => void router.push("/groupSelect")} />
             </div>
         </main>
     );

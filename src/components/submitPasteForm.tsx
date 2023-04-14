@@ -2,6 +2,7 @@ import { FC, MouseEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import { paste } from ".prisma/client";
+import ReusableButton from "~/components/reusableButton";
 
 interface SubmitPasteFormProps {
     handleSubmit: (e: MouseEvent<HTMLButtonElement>,title:string,group:string,text:string) => void;
@@ -32,13 +33,9 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({handleSubmit}) => {
                     <textarea onChange={(e) => setText(e.target.value)}
                               className="bg-puddlePurple resize min-h-[7rem] w-96" />
                     <div>
-                        <button onClick={(e) => handleSubmit(e,title,group,text)}
-                                className="my-5 bg-puddlePurple w-44 hover:text-green-300 active:translate-y-1 active:text-green-500 py-2 px-4">Submit
-                        </button>
+                        <ReusableButton text={"Submit"} onClick={(e:MouseEvent<HTMLButtonElement>) => handleSubmit(e,title,group,text)} overrideWidth={44} />
                     </div>
-                    <button onClick={(e) => redirect(e)}
-                            className="bg-puddlePurple w-44 hover:text-red-300 active:translate-y-1 active:text-red-500 py-2 px-4">Return
-                    </button>
+                    <ReusableButton text={"Return"} onClick={(e) => redirect(e)} overrideWidth={44} isDangerous={true} />
                 </form>
             </>
     )

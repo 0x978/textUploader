@@ -4,6 +4,7 @@ import { GetServerSidePropsContext } from "next";
 import { api } from "~/utils/api";
 import { paste } from ".prisma/client";
 import swal from "sweetalert2";
+import ReusableButton from "~/components/reusableButton";
 
 
 interface ctx {
@@ -27,18 +28,30 @@ const RawPasteDisplay: FC<ctx> = (ctx) => {
                 toast: true,
                 position: "top",
                 timer: 1000,
-                showConfirmButton: false
+                icon:"success",
+                showConfirmButton: false,
+                background:"#433151",
+                color:"#9e75f0",
             });
         }
     }
 
     return (
         <>
-            <main className="flex h-screen bg-deepPurple font-sans text-white min-h-screen overflow-y-auto">
+            <main className="flex h-screen bg-deepPurple text-white min-h-screen overflow-y-auto">
                 <div className="space-y-5 px-5">
-                    <button className="bg-puddlePurple w-24 active:translate-y-1" onClick={() => handleCopy()}>Copy
-                    </button>
-                    <pre className="whitespace-pre-wrap">{textData?.text}</pre>
+
+                    <div className={"flex gap-x-3 mt-2 p-2"}>
+                        <ReusableButton onClick={() => void router.push("/groupSelect")} text={"return"} isDangerous={true}/>
+                        <ReusableButton onClick={handleCopy} text={"copy text"}/>
+                    </div>
+
+                    <div className={"pt-5 font-sans"}>
+                        <pre className="whitespace-pre-wrap">{textData?.text}</pre>
+                    </div>
+
+
+
                 </div>
             </main>
 
