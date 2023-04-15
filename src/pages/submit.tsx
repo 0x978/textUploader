@@ -17,6 +17,8 @@ interface SubmitProps {
 
 const Submit: FC<SubmitProps> = ({ user }) => {
     const router = useRouter();
+    const [isPrivate,setIsPrivate] = useState<boolean>(false)
+
 
     const { mutate: submitPaste } = api.text.submitPost.useMutation<paste>(
         {
@@ -36,6 +38,24 @@ const Submit: FC<SubmitProps> = ({ user }) => {
         }
     );
 
+    const togglePrivate = () =>  {
+        if(!user){
+            void swal.fire({
+                title:"Not logged in!",
+                text: "You must be logged in to do that",
+                icon:"error",
+                timer: 1300,
+                toast: true,
+                position: "top",
+                showConfirmButton: false,
+                background:"#433151",
+                color:"#9e75f0",
+            })
+            return
+        }
+        setIsPrivate(prevState => !prevState)
+    }
+
     const handleSubmit = (e: MouseEvent<HTMLButtonElement>,title:string,group:string,text:string) => {
         e.preventDefault();
         let parsedGroup: string = group;
@@ -47,7 +67,8 @@ const Submit: FC<SubmitProps> = ({ user }) => {
             title: title,
             group: parsedGroup,
             text: text,
-            userID: user.id
+            userID: user.id,
+            isPrivate: isPrivate,
         });
     };
 
@@ -55,7 +76,7 @@ const Submit: FC<SubmitProps> = ({ user }) => {
         <main className="flex h-screen text-center bg-deepPurple text-superCoolEdgyPurple">
             <div className="m-auto">
                 <h1 className="font-bold text-3xl my-5">Submit a new paste</h1>
-                <SubmitPasteForm handleSubmit={handleSubmit}/>
+                <SubmitPasteForm handleSubmit={handleSubmit} handlePrivate={togglePrivate}/>
             </div>
         </main>
     );

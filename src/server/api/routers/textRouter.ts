@@ -147,16 +147,18 @@ export const textRouter = createTRPCRouter({
             title: z.string(),
             group: z.string(),
             text: z.string(),
-            userID: z.string()
+            userID: z.string(),
+            isPrivate: z.boolean(),
         }))
-        .mutation(async ({ input: { title, group, text, userID }, ctx: { prisma } }) => {
+        .mutation(async ({ input: { title, group, text, userID,isPrivate}, ctx: { prisma } }) => {
             try {
                 return await prisma.paste.create({
                     data: {
                         title: title,
                         group: group,
                         text: text,
-                        userID: userID
+                        userID: userID,
+                        isPrivate: isPrivate,
                     }
                 });
             } catch (error) {

@@ -32,7 +32,7 @@ const FAQ: FC = ({}) => {
                 <text className={"text-superCoolEdgyPurple "}>
                     Pastes are `unlisted` by default, that is, anyone who doesn&apos;t have the URL cannot view
                     it. <br />
-                    I will probably make a feature eventually which allows pastes to be private <br />
+                    However, you can also set pastes to be private, and only viewable by your account. <br />
                     Pastes are not encrypted, so please do not upload any passwords to sites you use <br />
                     <a className={"cursor-pointer text-green-400 underline"}
                        href={"/rawPasteDisplay/?id=clg3l8m9l0003mc09wwx0hqgn"}>You can view a paste here</a>

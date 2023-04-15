@@ -37,9 +37,24 @@ const AnonSubmit: FC = () => {
             title: title,
             group: parsedGroup,
             text: text,
-            userID: "Anonymous"
+            userID: "Anonymous",
+            isPrivate:false,
         });
     };
+
+    const togglePrivate = () =>  {
+        void swal.fire({
+            title:"Not logged in!",
+            text: "You must be logged in to do that",
+            icon:"error",
+            timer: 1300,
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            background:"#433151",
+            color:"#9e75f0",
+        })
+    }
 
     return (
         <main className="flex h-screen text-center bg-deepPurple text-superCoolEdgyPurple">
@@ -50,7 +65,7 @@ const AnonSubmit: FC = () => {
                 <h1 className="font-bold text-xl my-5">To save pastes, <span
                     className={"cursor-pointer text-green-400 underline"} onClick={() => void router.push("/")}>Login Now</span>
                 </h1>
-                <SubmitPasteForm handleSubmit={handleSubmit} />
+                <SubmitPasteForm handleSubmit={handleSubmit} handlePrivate={togglePrivate} />
             </div>
         </main>
     );
