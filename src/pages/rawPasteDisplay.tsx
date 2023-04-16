@@ -5,6 +5,8 @@ import { api } from "~/utils/api";
 import { paste } from ".prisma/client";
 import swal from "sweetalert2";
 import ReusableButton from "~/components/reusableButton";
+import { getServerAuthSession } from "~/server/auth";
+import { prisma } from "~/server/db";
 
 
 interface ctx {
@@ -59,7 +61,45 @@ const RawPasteDisplay: FC<ctx> = (ctx) => {
     );
 };
 
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+    const auth = await getServerAuthSession(context);
+
+    if(!context.query.id){
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false
+            }
+        };
+    }
+
+    const paste = await prisma.paste.findUnique({
+        select:{
+            userID: true,
+            isPrivate: true,
+        },
+        where:{
+            id:context.query.id as string
+        }
+    })
+
+    if(!paste){
+        return {
+            redirect: {
+                destination: "/404",
+                permanent: false
+            }
+        };
+    }
+
+    if(!auth && paste.isPrivate || auth && paste.isPrivate && (paste.userID !== auth.user.id)){
+        return {
+            redirect: {
+                destination: "/unauthorisedPasteAccess",
+                permanent: false
+            }
+        };
+    }
 
     return ({
         props: {
