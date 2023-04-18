@@ -19,6 +19,9 @@ const Submit: FC<SubmitProps> = ({ user }) => {
     const router = useRouter();
     const [isPrivate,setIsPrivate] = useState<boolean>(false)
 
+    const { data: groups } = api.text.getAllGroupsByUserID.useQuery<string>({ // Gets user key
+        userID: user.id
+    });
 
     const { mutate: submitPaste } = api.text.submitPost.useMutation<paste>(
         {
@@ -76,7 +79,7 @@ const Submit: FC<SubmitProps> = ({ user }) => {
         <main className="flex h-screen text-center bg-deepPurple text-superCoolEdgyPurple">
             <div className="m-auto">
                 <h1 className="font-bold text-3xl my-5">Submit a new paste</h1>
-                <SubmitPasteForm handleSubmit={handleSubmit} handlePrivate={togglePrivate}/>
+                <SubmitPasteForm handleSubmit={handleSubmit} handlePrivate={togglePrivate} groups={([...new Set(groups?.map(r => r.group))])}/> {/*groups turned into set,then back to array to get unique elements in O(n) time */}
             </div>
         </main>
     );

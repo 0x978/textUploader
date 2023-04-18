@@ -22,6 +22,29 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
+    getAllGroupsByUserID: protectedProcedure
+        .input(z.object({
+            userID: z.string()
+        }))
+        .query(async ({ input: { userID }, ctx: { prisma } }) => {
+            try {
+                return await prisma.paste.findMany({
+                    orderBy: {
+                        createdAt: "desc"
+                    },
+                    where: {
+                        userID: userID
+                    },
+                    select:{
+                        group:true,
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+                throw new Error("Failed to fetch");
+            }
+        }),
+
     getAllTextByGroup: protectedProcedure
         .input(z.object({
             group: z.string(),

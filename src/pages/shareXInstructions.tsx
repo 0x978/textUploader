@@ -66,6 +66,7 @@ const ShareXInstructions: FC<ShareXInstructionsProps> = ({ user }) => {
                 <h1 className={"text-xl"}>Press the button below to copy config</h1>
                 <ReusableButton text={"Config"} onClick={() => copyConfig()} />
                 <h1>Then, right click shareX -{">"} custom uploader settings {">"} import {">"} from clipboard</h1>
+                <h1>Finally, set text uploader (in the bottom left) to &quot;0x978 - Text-Uploader&quot;</h1>
 
                 <ReusableButton text={"Return"} isDangerous={true} onClick={() => void router.push("/groupSelect")} />
             </div>
