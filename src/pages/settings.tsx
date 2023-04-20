@@ -31,29 +31,58 @@ const Settings: FC<SettingsProps> = ({ user }) => {
 
 
     async function logout() {
-        await signOut().then(_ => {
-            void router.push("/");
-        });
+        void Swal.fire({
+            title: 'Logout?',
+            text: "If you logout, you will need to log back in to access your pastes.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm Reset',
+            background:"#433151",
+            color:"#9e75f0",
+        }).then(async (result) => {
+            if(result.isConfirmed){
+                await signOut().then(_ => {
+                    void router.push("/");
+                });
+            }
+        })
     }
 
     function handleChangeKey() {
-        const newKey = nanoid();
-        editKey({
-            id: user.id,
-            key: newKey
-        });
-        setModifiedKey(newKey)
-        setToggleKey(false)
         void Swal.fire({
-            toast: true,
-            text: "Reset Key",
-            showConfirmButton: false,
-            timer: 1000,
-            background: "#433151",
-            color: "#9e75f0",
-            icon: "success",
-            position: "top"
-        });
+            title: 'Reset Key?',
+            text: "If you reset your key, you will need to set up ShareX again!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm Reset',
+            background:"#433151",
+            color:"#9e75f0",
+        }).then((result) => {
+            if(result.isConfirmed){
+                const newKey = nanoid();
+                editKey({
+                    id: user.id,
+                    key: newKey
+                });
+                setModifiedKey(newKey)
+                setToggleKey(false)
+                void Swal.fire({
+                    toast: true,
+                    text: "Reset Key",
+                    showConfirmButton: false,
+                    timer: 1000,
+                    background: "#433151",
+                    color: "#9e75f0",
+                    icon: "success",
+                    position: "top"
+                });
+            }
+        })
+
     }
 
     return (

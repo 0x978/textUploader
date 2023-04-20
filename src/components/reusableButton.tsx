@@ -14,12 +14,12 @@ const ReusableButton: FC<ReusableButtonProps> = ({onClick,text,isDangerous,overr
 
     const danger:string = isDangerous ? `bg-fadedRed text-white` : (overrideBackground ?? `bg-puddlePurple`)
     const width = overrideWidth ? `w-${overrideWidth}` : `w-40`
-    const textCol = overrideTextColour ?? `superCoolEdgyPurple`
-    const hoverTextCol = overrideHoverTextColour ?? `emerald-300`
+    const textCol = overrideTextColour ?? "superCoolEdgyPurple"
+    const hoverTextCol = overrideHoverTextColour ?? "emerald-300"
 
     return(
         <button
-            className={` ${danger} ${width} text-${textCol} p-2 hover:text-${hoverTextCol} transition duration-200 active:translate-y-1.5 `}
+            className={`hover:text-${hoverTextCol} ${danger} ${width} text-${textCol} p-2 transition duration-200 active:translate-y-1.5 `}
             onClick={onClick}>{text}
         </button>
     )

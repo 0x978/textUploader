@@ -23,8 +23,6 @@ const PasteMetadata: FC<PasteMetadataProps> = ({fetchedPaste,handleTitleUpdate,s
         })
     }
 
-    console.log(fetchedPaste)
-
     return(
         <div className="space-y-2">
             <h1 className="text-4xl">Text metadata</h1>

@@ -56,6 +56,17 @@ const Submit: FC<SubmitProps> = ({ user }) => {
             })
             return
         }
+        void swal.fire({
+            title: isPrivate ? "Set as public paste" : "Set as Private Paste",
+            text: isPrivate ? "Paste is set to public" : "Paste is set to private",
+            icon: isPrivate ? "success" : "error",
+            timer: 1300,
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            background:"#433151",
+            color:"#9e75f0",
+        })
         setIsPrivate(prevState => !prevState)
     }
 
