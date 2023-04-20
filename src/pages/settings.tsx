@@ -30,7 +30,7 @@ const Settings: FC<SettingsProps> = ({ user }) => {
     const { mutate: editKey } = api.text.updateKey.useMutation<paste>();
 
 
-    async function logout() {
+    function logout() {
         void Swal.fire({
             title: 'Logout?',
             text: "If you logout, you will need to log back in to access your pastes.",
