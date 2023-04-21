@@ -5,6 +5,7 @@ import { GetServerSidePropsContext } from "next";
 import { getServerAuthSession } from "~/server/auth";
 import swal from "sweetalert2";
 import { useRouter } from "next/router";
+import { prisma } from "~/server/db";
 
 interface textEditProps {
     id: string,
@@ -34,7 +35,7 @@ const TextEdit: FC<textEditProps> = ({ id, user }) => {
         } });
 
     const { data: textData, isLoading } = api.text.getTextByID.useQuery<paste>({
-        textID: id
+        pasteAccessID: id
     }, {
         onSuccess: () => {
             if (textData?.text) {
@@ -95,6 +96,24 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) { // ca
     }
 
     const user = auth.user;
+
+    const paste = await prisma.paste.findUnique({
+        select:{
+            userID: true,
+        },
+        where:{
+            accessID:ctx.query.id as string
+        }
+    })
+
+    if(!paste || !auth || (paste.userID !== auth.user.id)){
+        return {
+            redirect: {
+                destination: "/unauthorisedPasteAccess",
+                permanent: false
+            }
+        };
+    }
 
     return {
         props: {

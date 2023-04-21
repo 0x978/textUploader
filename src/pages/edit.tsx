@@ -7,6 +7,7 @@ import { paste } from ".prisma/client";
 import EditGroupSelect from "~/components/editGroupSelect";
 import PasteMetadata from "~/components/pasteMetadata";
 import { getServerAuthSession } from "~/server/auth";
+import { prisma } from "~/server/db";
 
 interface editProps {
     user: {
@@ -26,7 +27,7 @@ const Edit: FC<editProps> = ({ user }) => {
     const id = router?.query?.id as string;
 
     const { data: fetchedPaste } = api.text.getTextByID.useQuery({
-        textID: id
+        pasteAccessID: id
     });
 
 
@@ -137,6 +138,24 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) { // ca
     }
 
     const user = auth.user;
+
+    const paste = await prisma.paste.findUnique({
+        select:{
+            userID: true,
+        },
+        where:{
+            accessID:ctx.query.id as string
+        }
+    })
+
+    if(!paste || !auth || (paste.userID !== auth.user.id)){
+        return {
+            redirect: {
+                destination: "/unauthorisedPasteAccess",
+                permanent: false
+            }
+        };
+    }
 
     return {
         props: {

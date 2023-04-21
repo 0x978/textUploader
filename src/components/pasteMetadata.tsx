@@ -3,6 +3,7 @@
 import React, {FC} from "react"
 import {paste} from ".prisma/client";
 import {useRouter} from "next/router";
+import ReusableButton from "~/components/reusableButton";
 
 interface PasteMetadataProps {
     fetchedPaste:paste
@@ -31,9 +32,10 @@ const PasteMetadata: FC<PasteMetadataProps> = ({fetchedPaste,handleTitleUpdate,s
             <h1>Group: {fetchedPaste.group ? fetchedPaste.group : "None"}</h1>
 
             <div className="flex flex-col items-center space-y-3">
-                <button className="bg-puddlePurple w-36 active:translate-y-1 p-1 " onClick={() => void handleTitleUpdate()}>Change Title</button>
-                <button className="bg-puddlePurple w-36 active:translate-y-1 p-1 " onClick={() => void setEditGroupMode(true)}>Change Group</button>
-                <button className="bg-puddlePurple w-36 active:translate-y-1 p-1 " onClick={() => handleEditText()}>Edit Text</button>
+                <ReusableButton text={"Change Title"} onClick={() => handleTitleUpdate()}/>
+                <ReusableButton text={"Change Group"} onClick={() => setEditGroupMode(true)}/>
+                <ReusableButton text={"Edit text"} onClick={() => handleEditText()}/>
+                <ReusableButton text={"Custom URL"} onClick={() => void router.push({pathname:"/customURL",query:{id:fetchedPaste.id}})}/>
             </div>
         </div>
     )

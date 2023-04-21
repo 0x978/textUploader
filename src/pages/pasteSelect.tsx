@@ -134,7 +134,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                         {textArr.map((paste, i) => { // Texts display
                                             return (
                                                 <div key={i} className="flex space-x-1.5 ">
-                                                    <div onClick={() => handleClick(textArr[i]!.text, textArr[i]!.id)}
+                                                    <div onClick={() => handleClick(textArr[i]!.text, textArr[i]!.accessID)}
                                                          key={i} className="relative flex flex-col justify-center items-center bg-puddlePurple w-96
                                     h-16 rounded-lg my-5 py-2 shadow-lg cursor-pointer hover:scale-110 transition duration-300">
                                                         <h1> {/*If text has title, use that, else: If length of text is over 30, put first 30 chars then "...", else put full string */}
@@ -193,6 +193,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) { // ca
             }
         };
     }
+
 
     const user = auth.user;
     return ({

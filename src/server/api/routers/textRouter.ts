@@ -86,13 +86,13 @@ export const textRouter = createTRPCRouter({
 
     getTextByID: protectedProcedure
         .input(z.object({
-            textID: z.string()
+            pasteAccessID: z.string()
         }))
-        .query(async ({ input: { textID }, ctx: { prisma } }) => {
+        .query(async ({ input: { pasteAccessID }, ctx: { prisma } }) => {
             try {
                 return await prisma.paste.findUnique({
                     where: {
-                        id: textID
+                        accessID: pasteAccessID
                     }
                 });
             } catch (error) {
@@ -103,13 +103,13 @@ export const textRouter = createTRPCRouter({
 
     getPasteByIDPrivate: publicProcedure
         .input(z.object({
-            textID: z.string()
+            pasteAccessID: z.string()
         }))
-        .query(async ({ input: { textID }, ctx: { prisma } }) => {
+        .query(async ({ input: { pasteAccessID }, ctx: { prisma } }) => {
             try {
                 return await prisma.paste.findUnique({
                     where: {
-                        id: textID
+                        accessID: pasteAccessID
                     },
                     select:{
                         text:true,
@@ -120,6 +120,22 @@ export const textRouter = createTRPCRouter({
             } catch (error) {
                 console.error(error);
                 throw new Error("Failed to fetch");
+            }
+        }),
+
+    doesPasteExist: publicProcedure
+        .input(z.object({
+            pasteAccessID: z.string()
+        }))
+        .query(async ({ input: { pasteAccessID }, ctx: { prisma } }) => {
+            try {
+                return await prisma.paste.findUnique({
+                    where: {
+                        accessID: pasteAccessID
+                    },
+                });
+            } catch (error) {
+                throw new Error("Paste Does not Exist");
             }
         }),
 

@@ -19,7 +19,7 @@ const RawPasteDisplay: FC<ctx> = (ctx) => {
     const text = router.query.text;
 
     const { data: textData } = api.text.getPasteByIDPrivate.useQuery<paste[]>({
-        textID: ctx.id
+        pasteAccessID: ctx.id
     });
 
     function handleCopy() {
@@ -79,7 +79,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             isPrivate: true,
         },
         where:{
-            id:context.query.id as string
+            accessID:context.query.id as string
         }
     })
 

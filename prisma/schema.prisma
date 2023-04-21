@@ -68,6 +68,7 @@ model VerificationToken {
 
 model paste {
   id        String   @id @default(cuid())
+  accessID  String   @unique @default(cuid())
   title     String?  @db.Text
   createdAt DateTime @default(now())
   text      String   @db.Text
