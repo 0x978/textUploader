@@ -4,7 +4,6 @@ import { prisma } from "~/server/db";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const { id } = req.query;
-    console.log(id);
 
     if (!id) {
         res.status(403).send({
@@ -13,9 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    let paste = await prisma.paste.findUnique({
+    const paste = await prisma.paste.findUnique({
         where: {
-            id: id as string
+            accessID: id as string
         }
     });
 

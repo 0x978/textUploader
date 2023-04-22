@@ -52,7 +52,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
         }
     }, [textData, min]);
 
-    const handleClick = (text: string, id: string) => {
+    const handleClick = (text: string, id: string, accessID:string) => {
         if (deleteMode) {
             void Swal.fire({
                 title: 'Delete Paste?',
@@ -76,14 +76,15 @@ const PasteSelect: FC<ctx> = (ctx) => {
             void router.push({
                 pathname: "edit",
                 query: {
-                    id: id
+                    id:id,
+                    accessID: accessID,
                 }
             });
         } else {
             void router.push({
-                pathname: "rawPasteDisplay",
+                pathname: "paste",
                 query: {
-                    id: id
+                    id: accessID
                 }
             });
         }
@@ -134,7 +135,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                         {textArr.map((paste, i) => { // Texts display
                                             return (
                                                 <div key={i} className="flex space-x-1.5 ">
-                                                    <div onClick={() => handleClick(textArr[i]!.text, textArr[i]!.accessID)}
+                                                    <div onClick={() => handleClick(textArr[i]!.text,textArr[i]!.id, textArr[i]!.accessID)}
                                                          key={i} className="relative flex flex-col justify-center items-center bg-puddlePurple w-96
                                     h-16 rounded-lg my-5 py-2 shadow-lg cursor-pointer hover:scale-110 transition duration-300">
                                                         <h1> {/*If text has title, use that, else: If length of text is over 30, put first 30 chars then "...", else put full string */}

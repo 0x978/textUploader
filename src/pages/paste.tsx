@@ -14,7 +14,7 @@ interface ctx {
     id: string,
 }
 
-const RawPasteDisplay: FC<ctx> = (ctx) => {
+const Paste: FC<ctx> = (ctx) => {
     const router = useRouter();
     const text = router.query.text;
 
@@ -109,4 +109,4 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
 };
 
-export default RawPasteDisplay;
+export default Paste;

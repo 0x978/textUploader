@@ -30,7 +30,7 @@ const TextEdit: FC<textEditProps> = ({ id, user }) => {
                 background:"#433151",
                 color:"#9e75f0",
             }).then((_) => {
-                void router.push("rawPasteDisplay?id=" + data.id);
+                void router.push("paste?id=" + id);
             });
         } });
 
@@ -45,10 +45,12 @@ const TextEdit: FC<textEditProps> = ({ id, user }) => {
     });
 
     const submitChanges = () => {
-        updateText({
-            text: text,
-            id: id
-        });
+        if(textData){
+            updateText({
+                text: text,
+                id: textData?.id
+            });
+        }
     };
 
 

@@ -35,7 +35,7 @@ const FAQ: FC = ({}) => {
                     However, you can also set pastes to be private, and only viewable by your account. <br />
                     Pastes are not encrypted, so please do not upload any passwords to sites you use <br />
                     <a className={"cursor-pointer text-green-400 underline"}
-                       href={"/rawPasteDisplay/?id=clgqyloxl000508mh0818de8q"}>You can view a paste here</a>
+                       href={"/paste/?id=clgqyloxl000508mh0818de8q"}>You can view a paste here</a>
                 </text>
 
                 <h1 className={"text-contrastingBlue"}>Can I store images if I point shareX to your API?</h1>

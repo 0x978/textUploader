@@ -25,9 +25,10 @@ const Edit: FC<editProps> = ({ user }) => {
     const [groups, setGroups] = useState<string[]>([]);
 
     const id = router?.query?.id as string;
+    const accessID = router?.query?.accessID as string;
 
     const { data: fetchedPaste } = api.text.getTextByID.useQuery({
-        pasteAccessID: id
+        pasteAccessID: accessID
     });
 
 
@@ -108,7 +109,7 @@ const Edit: FC<editProps> = ({ user }) => {
                                         <PasteMetadata fetchedPaste={fetchedPaste} handleTitleUpdate={handleTitleUpdate}
                                                        setEditGroupMode={setEditGroupMode} />
                                         <button
-                                            className="bg-puddlePurple p-1 w-32 hover:text-red-400 my-3 active:translate-y-1"
+                                            className="bg-puddlePurple p-1 w-52 hover:text-red-400 my-3 active:translate-y-1"
                                             onClick={() => void router.push({
                                                 pathname: "pasteSelect",
                                                 query: { group: fetchedPaste.group }
@@ -144,7 +145,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) { // ca
             userID: true,
         },
         where:{
-            accessID:ctx.query.id as string
+            accessID:ctx.query.accessID as string
         }
     })
 

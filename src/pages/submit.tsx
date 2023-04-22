@@ -27,7 +27,7 @@ const Submit: FC<SubmitProps> = ({ user }) => {
         {
             onSuccess: (data) => {
                 void swal.fire({
-                    title:"Post successfully submitted!",
+                    title:"Paste successfully submitted!",
                     text: "Redirecting...",
                     icon:"success",
                     timer: 1300,
@@ -35,7 +35,7 @@ const Submit: FC<SubmitProps> = ({ user }) => {
                     background:"#433151",
                     color:"#9e75f0",
                 }).then((_) => {
-                    void router.push("rawPasteDisplay?id=" + data.id);
+                    void router.push("paste?id=" + data.accessID);
                 });
             }
         }
