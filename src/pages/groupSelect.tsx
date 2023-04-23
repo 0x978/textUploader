@@ -61,7 +61,7 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
                 <div className="m-auto">
 
                     <h1 className="font-bold text-3xl my-5 ">Select a category</h1>
-                    <ReusableButton text={"Create a New Paste"} overrideWidth={60} onClick={() => void router.push("submit")}/>
+                    <ReusableButton text={"Create a New Paste"} overrideWidth={"large"} onClick={() => void router.push("submit")}/>
 
 
                     {isLoading ? // if fetching categories, display as such.

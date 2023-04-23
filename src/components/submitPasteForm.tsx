@@ -56,12 +56,12 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate
 
                     <div className={"flex flex-col space-y-3  text-center"}>
                         <ReusableButton text={"Set as private paste"} onClick={(e) => togglePrivate(e, isPrivate)}
-                                        overrideWidth={48} overrideBackground={buttonBackground}
+                                        overrideWidth={"large"} overrideBackground={buttonBackground}
                                         overrideTextColour={"white"} />
                         <ReusableButton text={"Submit"}
                                         onClick={(e: MouseEvent<HTMLButtonElement>) => handleSubmit(e, title, group, text)}
-                                        overrideWidth={48} />
-                        <ReusableButton text={"Return"} onClick={(e) => redirect(e)} overrideWidth={48}
+                                        overrideWidth={"large"} />
+                        <ReusableButton text={"Return"} onClick={(e) => redirect(e)} overrideWidth={"large"}
                                         isDangerous={true} />
                     </div>
                 </form>

@@ -32,10 +32,10 @@ const PasteMetadata: FC<PasteMetadataProps> = ({fetchedPaste,handleTitleUpdate,s
             <h1>Group: {fetchedPaste.group ? fetchedPaste.group : "None"}</h1>
 
             <div className="flex flex-col items-center space-y-3">
-                <ReusableButton text={"Change Title"} onClick={() => handleTitleUpdate()} overrideWidth={56} />
-                <ReusableButton text={"Change Group"} onClick={() => setEditGroupMode(true)} overrideWidth={56}/>
-                <ReusableButton text={"Edit text"} onClick={() => handleEditText()} overrideWidth={56}/>
-                <ReusableButton text={"Custom URL"} overrideWidth={56} onClick={() => void router.push({pathname:"/customURL",query:{id:fetchedPaste.id,URL:fetchedPaste.accessID}})}/>
+                <ReusableButton text={"Change Title"} onClick={() => handleTitleUpdate()} overrideWidth={"large"} />
+                <ReusableButton text={"Change Group"} onClick={() => setEditGroupMode(true)} overrideWidth={"large"}/>
+                <ReusableButton text={"Edit text"} onClick={() => handleEditText()} overrideWidth={"large"}/>
+                <ReusableButton text={"Custom URL"} overrideWidth={"large"} onClick={() => void router.push({pathname:"/customURL",query:{id:fetchedPaste.id,URL:fetchedPaste.accessID}})}/>
             </div>
         </div>
     )
