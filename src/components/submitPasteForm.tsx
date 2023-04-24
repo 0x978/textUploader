@@ -16,7 +16,7 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate
     const [group, setGroup] = useState<string>("");
     const [text, setText] = useState<string>("");
     const [isPrivate, setIsPrivate] = useState<boolean>(false);
-    const [buttonBackground, setButtonBackground] = useState<string>("bg-red-600");
+    const [buttonBackground, setButtonBackground] = useState<"red"|"green">("red");
     const [groupSelectMode, setGroupSelectMode] = useState<boolean>(false);
     const { data: session } = useSession();
 
@@ -32,7 +32,7 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate
         handlePrivate();
         if (session) {
             setIsPrivate(prevState => !prevState);
-            setButtonBackground(!toggledPrivate ? "bg-green-500" : "bg-red-600");
+            setButtonBackground(!toggledPrivate ? "green" : "red");
         }
     };
 
@@ -62,7 +62,7 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate
                                         onClick={(e: MouseEvent<HTMLButtonElement>) => handleSubmit(e, title, group, text)}
                                         overrideWidth={"large"} />
                         <ReusableButton text={"Return"} onClick={(e) => redirect(e)} overrideWidth={"large"}
-                                        isDangerous={true} />
+                                         overrideHoverTextColour={"red"}/>
                     </div>
                 </form>
 

@@ -165,7 +165,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
 
                                     <div className="my-5 space-x-10 ">
 
-                                        <ReusableButton text={"Delete Mode?"} onClick={() => handleChange("del")} overrideHoverTextColour={"red-300"}/>
+                                        <ReusableButton text={"Delete Mode?"} onClick={() => handleChange("del")} overrideHoverTextColour={"red"}/>
                                         <ReusableButton text={"Edit Mode?"} onClick={() => handleChange("edit")}/>
 
                                     </div>
