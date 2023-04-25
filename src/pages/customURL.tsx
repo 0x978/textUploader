@@ -69,7 +69,6 @@ const CustomURL: FC = () => {
                     <input className={"bg-puddlePurple w-96"} onChange={(e) => setURLValue(e.target.value)}/>
                     <ReusableButton text={"Submit"} onClick={() => updateURL()} />
                     <ReusableButton text={"Return"} onClick={() => void router.push("/edit?id="+URLValue)} />
-
                 </div>
             </div>
         </main>

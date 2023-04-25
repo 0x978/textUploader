@@ -94,8 +94,8 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
                     </div>
 
                     <div className={"space-x-10"}>
-                        <ReusableButton text={"User Settings"} overrideTextColour={"puddlePurple"} onClick={() => void router.push("/settings")} />
-                        <ReusableButton text={"ShareX Steps"} overrideTextColour={"puddlePurple"} onClick={() => void router.push("/shareXInstructions")} />
+                        <ReusableButton text={"User Settings"} onClick={() => void router.push("/settings")} />
+                        <ReusableButton text={"ShareX Steps"}  onClick={() => void router.push("/shareXInstructions")} />
                     </div>
 
                 </div>

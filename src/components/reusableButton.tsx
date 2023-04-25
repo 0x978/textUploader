@@ -23,7 +23,7 @@ const textColour = {
     "sky": "text-sky-300",
     "orange": "text-amber-300",
     "white": "text-white",
-    "puddlePurple": "text-puddlePurple"
+    "shallowPurple": "text-shallowPurple"
 }
 
 const hoverColour = {
@@ -55,7 +55,7 @@ const ReusableButton: FC<ReusableButtonProps> = ({onClick,text,isDangerous,overr
     return(
         <button
             className={`${background === "bg-puddlePurple" && danger ? danger : background} ${hoverTextCol} 
-            ${danger} ${width} ${textCol} p-2 transition duration-200 active:translate-y-1.5  `}
+             ${width} ${textCol} p-2 transition duration-200 active:translate-y-1.5  `}
             onClick={onClick}>{text}
         </button>
     )
