@@ -102,7 +102,7 @@ const Settings: FC<SettingsProps> = ({ user }) => {
                                 <h1>{userKey && !modifiedKey ? userKey.key : modifiedKey}</h1>
                             </div> :
 
-                            <ReusableButton text={"Show Key"} onClick={() => setToggleKey(true)}  />}
+                            <ReusableButton text={"Show Key"} onClick={() => setToggleKey(true)} overrideWidth={"large"}  />}
                     </div>
 
                 </div>
@@ -110,9 +110,10 @@ const Settings: FC<SettingsProps> = ({ user }) => {
 
                 <div className={"flex flex-col items-center py-2 space-y-4"}>
 
-                    <ReusableButton text={"Reset Key"} isDangerous={true} onClick={() => handleChangeKey()} />
-                    <ReusableButton text={"Logout"}  onClick={() => void logout()} />
-                    <ReusableButton text={"Return"}  onClick={() => void router.push("/groupSelect")} />
+                    <ReusableButton text={"Reset Key"} isDangerous={true} onClick={() => handleChangeKey()}  overrideWidth={"large"}/>
+                    <ReusableButton text={"Delete Account"} isDangerous={true} onClick={() => handleChangeKey()}  overrideWidth={"large"}/>
+                    <ReusableButton text={"Logout"}  onClick={() => void logout()} overrideWidth={"large"} />
+                    <ReusableButton text={"Return"}  onClick={() => void router.push("/groupSelect")} overrideWidth={"large"} />
                 </div>
 
             </div>

@@ -248,6 +248,23 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
+    // deleteAccount: protectedProcedure
+    //     .input(z.object({
+    //         id: z.string(),
+    //     }))
+    //     .mutation(async ({ input: { id }, ctx: { prisma } }) => {
+    //         try {
+    //             return await prisma.paste.delete({
+    //                 where: {
+    //                     id: id
+    //                 },
+    //             });
+    //         } catch (error) {
+    //             console.error(error);
+    //             throw new Error("Failed to fetch");
+    //         }
+    //     }),
+
     updateKey: protectedProcedure
         .input(z.object({
             id: z.string(),

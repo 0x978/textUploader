@@ -21,7 +21,7 @@ const CustomURL: FC = () => {
 
     async function updateURL(){
         await fetch("/api/doesPasteExist/" + URLValue).then(r => {
-            return r.json().then((data: pasteExist): pasteExist | undefined => {
+            return r.json().then((data: pasteExist): void => {
                 if (data?.doesExist) {
                     void swal.fire({
                         title: "ERROR",
@@ -34,25 +34,26 @@ const CustomURL: FC = () => {
                         background: "#433151",
                         color: "#9e75f0",
                     });
-                    return;
+                }
+                else{
+                    update({
+                        id:id,
+                        accessID:URLValue
+                    })
+                    void swal.fire({
+                        title:"SUCCESS",
+                        text: "The URL has been updated.",
+                        toast: true,
+                        position: "top",
+                        timer: 1500,
+                        icon:"success",
+                        showConfirmButton: false,
+                        background:"#433151",
+                        color:"#9e75f0",
+                    });
                 }
             })
         })
-        update({
-            id:id,
-            accessID:URLValue
-        })
-        void swal.fire({
-            title:"SUCCESS",
-            text: "The URL has been updated.",
-            toast: true,
-            position: "top",
-            timer: 1500,
-            icon:"success",
-            showConfirmButton: false,
-            background:"#433151",
-            color:"#9e75f0",
-        });
     }
 
 

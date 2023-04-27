@@ -13,7 +13,7 @@ interface ReusableButtonProps {
 
 const size = {
     "small": "w-30",
-    "medium": "w-50",
+    "medium": "w-48",
     "large": "w-56"
 }
 const textColour = {
