@@ -38,7 +38,7 @@ const Settings: FC<SettingsProps> = ({ user }) => {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Confirm Reset',
+            confirmButtonText: 'Confirm',
             background:"#433151",
             color:"#9e75f0",
         }).then(async (result) => {
@@ -85,6 +85,29 @@ const Settings: FC<SettingsProps> = ({ user }) => {
 
     }
 
+    function handleDeleteAccount(){
+        void Swal.fire({
+            title: 'Delete account?',
+            text: "If you delete your account, all your pastes will also be permanently deleted",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm',
+            background:"#433151",
+            color:"#9e75f0",
+
+        }).then(async (result) => {
+            if(result.isConfirmed){
+                await fetch("/api/deleteAccount/" + user.id).then(r => {
+                   void signOut().then(_ => {
+                        void router.push("/");
+                    });
+                })
+                }
+        })
+    }
+
     return (
         <main className="flex h-screen text-center bg-deepPurple text-superCoolEdgyPurple ">
             <div className="m-auto space-y-5">
@@ -111,7 +134,7 @@ const Settings: FC<SettingsProps> = ({ user }) => {
                 <div className={"flex flex-col items-center py-2 space-y-4"}>
 
                     <ReusableButton text={"Reset Key"} isDangerous={true} onClick={() => handleChangeKey()}  overrideWidth={"large"}/>
-                    <ReusableButton text={"Delete Account"} isDangerous={true} onClick={() => handleChangeKey()}  overrideWidth={"large"}/>
+                    <ReusableButton text={"Delete Account"} isDangerous={true} onClick={() => handleDeleteAccount()}  overrideWidth={"large"}/>
                     <ReusableButton text={"Logout"}  onClick={() => void logout()} overrideWidth={"large"} />
                     <ReusableButton text={"Return"}  onClick={() => void router.push("/groupSelect")} overrideWidth={"large"} />
                 </div>
