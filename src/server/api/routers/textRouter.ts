@@ -135,7 +135,7 @@ export const textRouter = createTRPCRouter({
                     },
                 });
             } catch (error) {
-                throw new Error("Paste Does not Exist");
+                throw new Error("Id Does not Exist");
             }
         }),
 

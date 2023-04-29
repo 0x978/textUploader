@@ -69,7 +69,7 @@ const CustomURL: FC = () => {
                 <div className={"flex flex-col my-5 space-y-4 justify-center text-center items-center"}>
                     <input className={"bg-puddlePurple w-96"} onChange={(e) => setURLValue(e.target.value)}/>
                     <ReusableButton text={"Submit"} onClick={() => updateURL()} />
-                    <ReusableButton text={"Return"} onClick={() => void router.push("/edit?id="+URLValue)} />
+                    <ReusableButton text={"Return"} onClick={() => void router.push("/edit?accessID="+URLValue)} />
                 </div>
             </div>
         </main>

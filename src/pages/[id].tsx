@@ -14,7 +14,7 @@ interface ctx {
     id: string,
 }
 
-const Paste: FC<ctx> = (ctx) => {
+const Id: FC<ctx> = (ctx) => {
     const router = useRouter();
     const text = router.query.text;
 
@@ -67,7 +67,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     if(!context.query.id){
         return {
             redirect: {
-                destination: "/",
+                destination: "/index",
                 permanent: false
             }
         };
@@ -109,4 +109,4 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
 };
 
-export default Paste;
+export default Id;

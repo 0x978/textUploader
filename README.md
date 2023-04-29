@@ -9,7 +9,7 @@ Pastes can then be viewed when the user wishes, as well as the ability to sort t
 I originally made this just to host my own pastes privately but decided to add auth and make it public.
 
 ## Features:
-- Paste Uploading via ShareX or manual upload
+- Id Uploading via ShareX or manual upload
 - Sorting of pastes via groups
 - Ability to name pastes
 - Ability to edit / delete pastes after upload

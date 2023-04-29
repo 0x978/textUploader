@@ -55,7 +55,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
     const handleClick = (text: string, id: string, accessID:string) => {
         if (deleteMode) {
             void Swal.fire({
-                title: 'Delete Paste?',
+                title: 'Delete Id?',
                 text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
@@ -82,11 +82,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
             });
         } else {
             void router.push({
-                pathname: "paste",
-                query: {
-                    id: accessID
-                }
-            });
+                pathname: "/"+accessID});
         }
     };
 

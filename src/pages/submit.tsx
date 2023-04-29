@@ -27,7 +27,7 @@ const Submit: FC<SubmitProps> = ({ user }) => {
         {
             onSuccess: (data) => {
                 void swal.fire({
-                    title:"Paste successfully submitted!",
+                    title:"Id successfully submitted!",
                     text: "Redirecting...",
                     icon:"success",
                     timer: 1300,
@@ -57,8 +57,8 @@ const Submit: FC<SubmitProps> = ({ user }) => {
             return
         }
         void swal.fire({
-            title: isPrivate ? "Set as public paste" : "Set as Private Paste",
-            text: isPrivate ? "Paste is set to public" : "Paste is set to private",
+            title: isPrivate ? "Set as public paste" : "Set as Private Id",
+            text: isPrivate ? "Id is set to public" : "Id is set to private",
             icon: isPrivate ? "success" : "error",
             timer: 1300,
             toast: true,
