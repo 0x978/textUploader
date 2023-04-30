@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import {type FC, useEffect, useState } from "react";
 import { api } from "~/utils/api";
-import { paste } from ".prisma/client";
-import { GetServerSidePropsContext } from "next";
+import type { paste } from ".prisma/client";
+import type { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { getServerAuthSession } from "~/server/auth";
 import GroupDisplay from "~/components/groupDisplay";
@@ -34,7 +34,7 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
         });
     };
 
-    const { data: textData, isLoading } = api.text.getAllText.useQuery<paste[]>({ // fetches all texts, parsing their groups to display each available group. This is not sustainable
+    const {isLoading } = api.text.getAllText.useQuery<paste[]>({ // fetches all texts, parsing their groups to display each available group. This is not sustainable
         userID: user.id
     }, {
         onSuccess(res: paste[]) {

@@ -1,8 +1,8 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { useRouter } from "next/router";
-import { GetServerSidePropsContext } from "next";
+import type { GetServerSidePropsContext } from "next";
 import { api } from "~/utils/api";
-import { paste } from ".prisma/client";
+import type { paste } from ".prisma/client";
 import swal from "sweetalert2";
 import ReusableButton from "~/components/reusableButton";
 import { getServerAuthSession } from "~/server/auth";
@@ -16,7 +16,6 @@ interface ctx {
 
 const Id: FC<ctx> = (ctx) => {
     const router = useRouter();
-    const text = router.query.text;
 
     const { data: textData } = api.text.getPasteByIDPrivate.useQuery<paste[]>({
         pasteAccessID: ctx.id

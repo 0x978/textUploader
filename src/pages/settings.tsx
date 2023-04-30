@@ -1,10 +1,10 @@
-import { FC, useState } from "react";
+import { type FC, useState } from "react";
 import { getServerAuthSession } from "~/server/auth";
-import { GetServerSidePropsContext } from "next";
+import type { GetServerSidePropsContext } from "next";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
-import { paste } from ".prisma/client";
+import type { paste } from ".prisma/client";
 import { nanoid } from "nanoid";
 import Swal from "sweetalert2";
 import ReusableButton from "~/components/reusableButton";
@@ -99,7 +99,7 @@ const Settings: FC<SettingsProps> = ({ user }) => {
 
         }).then(async (result) => {
             if(result.isConfirmed){
-                await fetch("/api/deleteAccount/" + user.id).then(r => {
+                await fetch("/api/deleteAccount/" + user.id).then(_ => {
                    void signOut().then(_ => {
                         void router.push("/");
                     });

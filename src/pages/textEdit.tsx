@@ -1,7 +1,7 @@
-import { FC, useState } from "react";
+import { type FC, useState } from "react";
 import { api } from "~/utils/api";
-import { paste } from ".prisma/client";
-import { GetServerSidePropsContext } from "next";
+import type { paste } from ".prisma/client";
+import type { GetServerSidePropsContext } from "next";
 import { getServerAuthSession } from "~/server/auth";
 import swal from "sweetalert2";
 import { useRouter } from "next/router";
@@ -16,11 +16,11 @@ interface textEditProps {
     };
 }
 
-const TextEdit: FC<textEditProps> = ({ id, user }) => {
+const TextEdit: FC<textEditProps> = ({ id}) => {
     const router = useRouter()
 
     const [text, setText] = useState<string>("");
-    const { mutate: updateText } = api.text.updateText.useMutation({ onSuccess: (data) => {
+    const { mutate: updateText } = api.text.updateText.useMutation({ onSuccess: (_) => {
             void swal.fire({
                 title:"Post successfully Edited!",
                 text: "Redirecting...",

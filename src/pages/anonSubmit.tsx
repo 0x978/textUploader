@@ -1,7 +1,7 @@
-import { FC, MouseEvent } from "react";
+import type{ FC, MouseEvent } from "react";
 import SubmitPasteForm from "~/components/submitPasteForm";
 import { api } from "~/utils/api";
-import { paste } from ".prisma/client";
+import { type paste } from ".prisma/client";
 import { useRouter } from "next/router";
 import swal from "sweetalert2";
 

@@ -1,9 +1,9 @@
-import React, { FC, useState } from "react";
+import React, { type FC, useState } from "react";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
-import { GetServerSidePropsContext } from "next";
-import { paste } from ".prisma/client";
+import type { GetServerSidePropsContext } from "next";
+import type { paste } from ".prisma/client";
 import EditGroupSelect from "~/components/editGroupSelect";
 import PasteMetadata from "~/components/pasteMetadata";
 import { getServerAuthSession } from "~/server/auth";
@@ -50,7 +50,7 @@ const Edit: FC<editProps> = ({ user }) => {
         }
     };
 
-    const { data: textData } = api.text.getAllText.useQuery<paste[]>({
+     api.text.getAllText.useQuery<paste[]>({
         userID: user.id
     }, {
         onSuccess(res: paste[]) {

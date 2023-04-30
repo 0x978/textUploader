@@ -1,6 +1,6 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { getServerAuthSession } from "~/server/auth";
-import { GetServerSidePropsContext } from "next";
+import type { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import Swal from "sweetalert2"

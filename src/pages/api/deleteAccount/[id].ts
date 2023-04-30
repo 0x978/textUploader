@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "~/server/db";
 import { authOptions } from "~/server/auth";
 import { getServerSession } from "next-auth";
@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         where: {
             id: id
         }
-    }).catch(r => {
+    }).catch(_ => {
         res.status(400).send({
             error: "ID not found",
             success:false,

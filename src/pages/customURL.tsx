@@ -1,7 +1,7 @@
-import { FC, useState } from "react";
+import { type FC, useState } from "react";
 import ReusableButton from "~/components/reusableButton";
 import { useRouter } from "next/router";
-import { GetServerSidePropsContext } from "next";
+import { type GetServerSidePropsContext } from "next";
 import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
 import { api } from "~/utils/api";

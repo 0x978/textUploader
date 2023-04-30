@@ -1,7 +1,5 @@
-import { FC, MouseEvent, useEffect, useState } from "react";
+import { type FC, type MouseEvent, useState } from "react";
 import { useRouter } from "next/router";
-import { api } from "~/utils/api";
-import { paste } from ".prisma/client";
 import ReusableButton from "~/components/reusableButton";
 import { useSession } from "next-auth/react";
 

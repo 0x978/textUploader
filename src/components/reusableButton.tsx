@@ -1,4 +1,4 @@
-import React, {FC} from "react"
+import React, {type FC} from "react"
 
 interface ReusableButtonProps {
     onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void | Promise<void>; // Add onClick prop
@@ -8,7 +8,6 @@ interface ReusableButtonProps {
     overrideTextColour ?: keyof typeof textColour;
     overrideHoverTextColour ?: keyof typeof hoverColour
     overrideBackground ?: keyof typeof bgColour
-    injectCustomProperty ?: string
 }
 
 const size = {
@@ -43,7 +42,7 @@ const bgColour = {
 }
 
 const ReusableButton: FC<ReusableButtonProps> = ({onClick,text,isDangerous,overrideWidth,overrideTextColour
-                                                     ,overrideHoverTextColour,overrideBackground,injectCustomProperty}) => {
+                                                     ,overrideHoverTextColour,overrideBackground}) => {
 
 
     const danger = isDangerous ? `bg-fadedRed text-white` : `bg-puddlePurple`

@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useState } from "react";
+import { type FC, type MouseEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { GetServerSidePropsContext } from "next";
 import { api } from "~/utils/api";

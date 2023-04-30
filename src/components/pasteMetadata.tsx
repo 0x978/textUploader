@@ -1,7 +1,7 @@
 // component representing the metadata of a paste (date, title, group); as well as the options to update metadata.
 
-import React, {FC} from "react"
-import {paste} from ".prisma/client";
+import React, {type FC} from "react"
+import {type paste} from ".prisma/client";
 import {useRouter} from "next/router";
 import ReusableButton from "~/components/reusableButton";
 

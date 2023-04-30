@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, type NextPage } from "next";
+import type { GetServerSidePropsContext, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
