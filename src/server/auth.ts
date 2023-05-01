@@ -48,6 +48,11 @@ export const authOptions: NextAuthOptions = {
             return session;
         }
     },
+    events:{
+        signIn(message){
+           console.log("Is new user: " , message.isNewUser)
+       }
+    },
     adapter: PrismaAdapter(prisma),
     providers: [
         DiscordProvider({

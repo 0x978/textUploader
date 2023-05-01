@@ -6,6 +6,7 @@ import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
 import { api } from "~/utils/api";
 import swal from "sweetalert2"
+import { base } from "next/dist/build/webpack/config/blocks/base";
 
 interface pasteExist{
     doesExist:boolean
@@ -20,6 +21,7 @@ const CustomURL: FC = () => {
 
 
     async function updateURL(){
+        if(checkIfReserved(URLValue)){return;}
         await fetch("/api/doesPasteExist/" + URLValue).then(r => {
             return r.json().then((data: pasteExist): void => {
                 if (data?.doesExist) {
@@ -54,6 +56,29 @@ const CustomURL: FC = () => {
                 }
             })
         })
+    }
+
+    function checkIfReserved(URL:string){
+        const disallowedURLs:string[] = ["anonSubmit","customURL","edit","FAQ","groupSelect","pasteSelect","settings","shareXInstructions","submit","textEdit","unauthorisedPasteAccess","404"]
+        for(let i = 0; i < disallowedURLs.length;i++){
+            const curr = disallowedURLs[i]
+            if(typeof curr === "string" && URL.localeCompare(curr,"en",{sensitivity:`base`}) === 0){
+                console.log(curr,URL,URL.localeCompare(curr,"en",{sensitivity:`base`}))
+                void swal.fire({
+                    title: "ERROR",
+                    text: "The given URL matches a reserved page.",
+                    toast: true,
+                    position: "top",
+                    timer: 1500,
+                    icon: "error",
+                    showConfirmButton: false,
+                    background: "#433151",
+                    color: "#9e75f0",
+                });
+                return true
+            }
+        }
+        return false
     }
 
 
