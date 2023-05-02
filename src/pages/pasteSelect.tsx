@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { getServerAuthSession } from "~/server/auth";
 import Swal from "sweetalert2";
 import ReusableButton from "~/components/reusableButton";
+import EditGroupSelect from "~/components/editGroupSelect";
 
 interface ctx {
     group: string,
@@ -24,6 +25,32 @@ const PasteSelect: FC<ctx> = (ctx) => {
     const [deleteMode, setDeleteMode] = useState<boolean>(false);
     const [editMode, setEditMode] = useState<boolean>(false);
     const [style, setStyle] = useState<string>("text-superCoolEdgyPurple");
+    const [groupChanges,setGroupChanges] = useState<string[]>([])
+    const [delText,setDelText] = useState<string>("Delete Mode?")
+    const [massGroup,setMassGroup] = useState<boolean>(false)
+    const [submitNewGroups,setSubmitNewGroups] = useState<boolean>(false)
+
+    const [paginatedGroups, setPaginatedGroups] = useState<string[]>([]);
+    const [groups, setGroups] = useState<string[]>([]);
+    const [groupMap, setGroupMap] = useState<Map<string, number>>(new Map<string, number>);
+    const [minPageSize, setMinPageSize] = useState<number>(0);
+    const { mutate: updateGroup } = api.text.updateGroup.useMutation();
+
+    api.text.getAllText.useQuery<paste[]>({ // fetches all texts, parsing their groups to display each available group. This is not sustainable
+        userID: ctx.user.id
+    }, {
+        onSuccess(res: paste[]) {
+            const uniqueGroup = new Map<string, number>();
+            res.forEach(r => {
+                const count = uniqueGroup.get(r.group);
+                uniqueGroup.set(r.group, (count ? count + 1 : 1));
+            });
+            const uniqueKeys = Array.from(uniqueGroup.keys());
+            setGroups(uniqueKeys);
+            setGroupMap(uniqueGroup);
+            setPaginatedGroups(uniqueKeys?.slice(minPageSize, 5));
+        }
+    });
 
     const { data: textData } = api.text.getAllTextByGroup.useQuery<paste[]>({
         group: ctx.group,
@@ -55,7 +82,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
     const handleClick = (text: string, id: string, accessID:string) => {
         if (deleteMode) {
             void Swal.fire({
-                title: 'Delete Id?',
+                title: 'Delete Paste?',
                 text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
@@ -80,7 +107,21 @@ const PasteSelect: FC<ctx> = (ctx) => {
                     accessID: accessID,
                 }
             });
-        } else {
+        }
+        else if(massGroup){
+            void Swal.fire({
+                title:"Post successfully added to mass group change",
+                position:"top",
+                toast:true,
+                icon:"success",
+                timer: 1500,
+                showConfirmButton: false,
+                background:"#433151",
+                color:"#9e75f0",
+            })
+            setGroupChanges([...groupChanges,id])
+        }
+        else {
             void router.push({
                 pathname: "/"+accessID});
         }
@@ -89,29 +130,61 @@ const PasteSelect: FC<ctx> = (ctx) => {
     const handleChange = (change: string) => { // this sucks but the way tailwind wants to work on Vercel has forced my hand
         switch (change) {
             case "del":
-                if (deleteMode) {
+                if (deleteMode||massGroup) {
                     setStyle("text-superCoolEdgyPurple");
                     setDeleteMode(false);
+                    setEditMode(false)
+                    setMassGroup(false)
+                    setDelText("Delete mode?")
                     return;
-                } else {
+                }
+                if(editMode){
+                    setMassGroup(true)
+                    setEditMode(false)
+                    setStyle("text-orange-300");
+                }
+                else {
                     setStyle("text-red-400");
                     setDeleteMode(true);
                     setEditMode(false)
+                    setMassGroup(false)
                 }
                 break;
             case "edit":
                 if (editMode) {
                     setStyle("text-superCoolEdgyPurple");
                     setEditMode(false);
+                    setDelText("Delete Mode?")
                 } else {
                     setStyle("text-green-400");
                     setEditMode(true);
                     setDeleteMode(false)
+                    setDelText("Mass Edit Group")
                 }
                 break;
         }
     };
 
+    function handleGroup(newGroup: string){
+        groupChanges.forEach(id => {
+            updateGroup({
+                id: id,
+                group: newGroup
+            });
+        })
+        void Swal.fire({
+            title:"Successfully Changed groups",
+            text:"Redirecting...",
+            icon:"success",
+            timer: 1000,
+            showConfirmButton: false,
+            background:"#433151",
+            color:"#9e75f0",
+        }).then(_ =>{
+            void router.push("/groupSelect")
+        })
+
+    }
 
     return <>
         <Head>
@@ -125,7 +198,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 <h1 className="font-bold text-3xl my-5 ">Texts:</h1>
                 <div className="">
                     {
-                        textData ? (
+                        textData && !submitNewGroups ? (
                                 <div className="">
                                     <div className="h-[53vh]">
                                         {textArr.map((paste, i) => { // Texts display
@@ -161,17 +234,27 @@ const PasteSelect: FC<ctx> = (ctx) => {
 
                                     <div className="my-5 space-x-10 ">
 
-                                        <ReusableButton text={"Delete Mode?"} onClick={() => handleChange("del")} overrideHoverTextColour={"red"}/>
+                                        <ReusableButton text={delText} onClick={() => handleChange("del")} overrideHoverTextColour={"red"}/>
                                         <ReusableButton text={"Edit Mode?"} onClick={() => handleChange("edit")}/>
 
                                     </div>
-                                    <button className={`bg-puddlePurple p-2 w-40 hover:text-orange-300`}
-                                            onClick={() => void router.push({ pathname: "groupSelect" }, "groupSelect")}>Return
-                                    </button>
+
+                                    <div className={"space-x-10"}>
+                                        <button className={`bg-puddlePurple p-2 w-40 hover:text-orange-300`}
+                                                onClick={() => void router.push({ pathname: "groupSelect" }, "groupSelect")}>Return
+                                        </button>
+
+                                        {massGroup && <ReusableButton text={"apply changes"} onClick={() => setSubmitNewGroups(true)} />}
+                                    </div>
+
+
                                 </div>
                             )
                             :
-                            <h1>Loading</h1>
+                            submitNewGroups ?
+                                <EditGroupSelect groups={groups} handleGroupChange={handleGroup}/>
+                                :
+                                <h1>Loading</h1>
                     }
                 </div>
             </div>

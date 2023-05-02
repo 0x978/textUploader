@@ -30,7 +30,7 @@ const TextEdit: FC<textEditProps> = ({ id}) => {
                 background:"#433151",
                 color:"#9e75f0",
             }).then((_) => {
-                void router.push("paste?id=" + id);
+                void router.push("/" + id);
             });
         } });
 

@@ -27,7 +27,7 @@ const Submit: FC<SubmitProps> = ({ user }) => {
         {
             onSuccess: (data) => {
                 void swal.fire({
-                    title:"Id successfully submitted!",
+                    title:"Paste successfully submitted!",
                     text: "Redirecting...",
                     icon:"success",
                     timer: 1300,
