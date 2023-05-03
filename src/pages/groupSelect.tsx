@@ -88,7 +88,7 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
 
                         <button className="w-40 bg-puddlePurple p-2  hover:-translate-y-1 transition duration-300"
                                 onClick={() => {
-                                    if ((minPageSize + 5 <= groups.length)) setMinPageSize(prevState => prevState + 5);
+                                    if ((minPageSize + 5 < groups.length)) setMinPageSize(prevState => prevState + 5);
                                 }}>Increment
                         </button>
                     </div>
