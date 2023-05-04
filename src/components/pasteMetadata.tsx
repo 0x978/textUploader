@@ -30,6 +30,8 @@ const PasteMetadata: FC<PasteMetadataProps> = ({fetchedPaste,handleTitleUpdate,s
             <h1>Date created: {fetchedPaste.createdAt.toLocaleString()} </h1>
             <h1>Title: {fetchedPaste.title ? fetchedPaste.title : "None"}</h1>
             <h1>Group: {fetchedPaste.group ? fetchedPaste.group : "None"}</h1>
+            <h1>Views: {fetchedPaste.views ? fetchedPaste.views : "None"}</h1>
+
 
             <div className="flex flex-col items-center space-y-3">
                 <ReusableButton text={"Change Title"} onClick={() => handleTitleUpdate()} overrideWidth={"large"} />

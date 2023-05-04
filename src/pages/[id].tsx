@@ -7,6 +7,7 @@ import swal from "sweetalert2";
 import ReusableButton from "~/components/reusableButton";
 import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
+import { useEffect, useState } from "react";
 
 
 interface ctx {
@@ -16,10 +17,14 @@ interface ctx {
 
 const Id: FC<ctx> = (ctx) => {
     const router = useRouter();
+    const [updated,setUpdated] = useState<boolean>(false)
 
     const { data: textData } = api.text.getPasteByIDPrivate.useQuery<paste[]>({
         pasteAccessID: ctx.id
     });
+
+    const { mutate: updateViews } = api.text.updateViews.useMutation();
+
 
     function handleCopy() {
         if (textData?.text) {
@@ -36,6 +41,19 @@ const Id: FC<ctx> = (ctx) => {
             });
         }
     }
+
+    useEffect(() => {
+        if(textData && !updated){
+            console.log(textData)
+            const newViews = textData?.views +1
+            console.log(newViews)
+            setUpdated(true)
+            updateViews({
+                id: ctx.id,
+                updatedViewsCount: newViews
+            })
+        }
+    },[textData])
 
     return (
         <>

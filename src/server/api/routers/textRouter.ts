@@ -115,6 +115,7 @@ export const textRouter = createTRPCRouter({
                         text:true,
                         title:true,
                         createdAt:true,
+                        views:true,
                     }
                 });
             } catch (error) {
@@ -240,6 +241,27 @@ export const textRouter = createTRPCRouter({
                     },
                     data: {
                         group: group
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+                throw new Error("Failed to fetch");
+            }
+        }),
+
+    updateViews: publicProcedure
+        .input(z.object({
+            id: z.string(),
+            updatedViewsCount: z.number(),
+        }))
+        .mutation(async ({ input: { id, updatedViewsCount }, ctx: { prisma } }) => {
+            try {
+                return await prisma.paste.update({
+                    where: {
+                        accessID: id
+                    },
+                    data: {
+                        views: updatedViewsCount
                     }
                 });
             } catch (error) {

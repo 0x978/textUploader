@@ -76,4 +76,5 @@ model paste {
   author    User?    @relation(fields: [userID], references: [id], onDelete: Cascade)
   userID    String?
   isPrivate Boolean  @default(false)
+  views     Int      @default(0)
 }
