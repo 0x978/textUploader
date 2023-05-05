@@ -3,9 +3,24 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { getServerAuthSession } from "~/server/auth";
+import { useEffect, useState } from "react";
+
+interface countInterface {
+    count: number;
+}
 
 const Home: NextPage = () => {
     const router = useRouter();
+    const [count, setCount] = useState<number>(0);
+
+    useEffect(() => {
+        const countPastes = async () => {
+            await fetch("/api/metadata/getPasteCount").then(r => {
+                r.json().then((res: countInterface) => setCount(res.count)).catch(r => console.log("unable to fetch paste count"));
+            });
+        };
+        void countPastes();
+    }, []);
 
     return (
         <>
@@ -43,10 +58,11 @@ const Home: NextPage = () => {
                         </div>
 
 
-
-                        <div className={"my-10 text-xl bg-puddlePurple cursor-pointer"} onClick={() => void router.push("FAQ")} >
+                        <div className={"my-10 text-xl bg-puddlePurple cursor-pointer"}
+                             onClick={() => void router.push("FAQ")}>
                             FAQ
                         </div>
+                        <h1 className={"text-opacity-5"}>Total number of pastes: {count}</h1>
                     </div>
                 </div>
 
