@@ -25,10 +25,10 @@ const PasteSelect: FC<ctx> = (ctx) => {
     const [deleteMode, setDeleteMode] = useState<boolean>(false);
     const [editMode, setEditMode] = useState<boolean>(false);
     const [style, setStyle] = useState<string>("text-superCoolEdgyPurple");
-    const [groupChanges,setGroupChanges] = useState<string[]>([])
-    const [delText,setDelText] = useState<string>("Delete Mode?")
-    const [massGroup,setMassGroup] = useState<boolean>(false)
-    const [submitNewGroups,setSubmitNewGroups] = useState<boolean>(false)
+    const [groupChanges, setGroupChanges] = useState<string[]>([]);
+    const [delText, setDelText] = useState<string>("Delete Mode?");
+    const [massGroup, setMassGroup] = useState<boolean>(false);
+    const [submitNewGroups, setSubmitNewGroups] = useState<boolean>(false);
 
     const [paginatedGroups, setPaginatedGroups] = useState<string[]>([]);
     const [groups, setGroups] = useState<string[]>([]);
@@ -60,15 +60,15 @@ const PasteSelect: FC<ctx> = (ctx) => {
     const { mutate: deleteItem } = api.text.deleteText.useMutation({
         onSuccess(deletedPost) {
             void Swal.fire({
-                title:"Post successfully Deleted",
-                position:"top",
-                toast:true,
-                icon:"success",
+                title: "Post successfully Deleted",
+                position: "top",
+                toast: true,
+                icon: "success",
                 timer: 1500,
                 showConfirmButton: false,
-                background:"#433151",
-                color:"#9e75f0",
-            })
+                background: "#433151",
+                color: "#9e75f0"
+            });
             setTextArr(prevState => prevState.filter((q) => q.id !== deletedPost.id));
         }
     });
@@ -79,18 +79,18 @@ const PasteSelect: FC<ctx> = (ctx) => {
         }
     }, [textData, min]);
 
-    const handleClick = (text: string, id: string, accessID:string) => {
+    const handleClick = (text: string, id: string, accessID: string) => {
         if (deleteMode) {
             void Swal.fire({
-                title: 'Delete Paste?',
+                title: "Delete Paste?",
                 text: "You won't be able to revert this!",
-                icon: 'warning',
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Confirm Deletion',
-                background:"#433151",
-                color:"#9e75f0",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Confirm Deletion",
+                background: "#433151",
+                color: "#9e75f0"
             }).then((result) => {
                 if (result.isConfirmed) {
                     deleteItem({ id: id });
@@ -98,91 +98,89 @@ const PasteSelect: FC<ctx> = (ctx) => {
                         setMin(min === 0 ? prevState => prevState + 5 : prevState => prevState - 5);
                     }
                 }
-            })
+            });
         } else if (editMode) {
             void router.push({
                 pathname: "edit",
                 query: {
-                    id:id,
-                    accessID: accessID,
+                    id: id,
+                    accessID: accessID
                 }
             });
-        }
-        else if(massGroup){
+        } else if (massGroup) {
             void Swal.fire({
-                title:"Post successfully added to mass group change",
-                position:"top",
-                toast:true,
-                icon:"success",
+                title: "Post successfully added to mass group change",
+                position: "top",
+                toast: true,
+                icon: "success",
                 timer: 1500,
                 showConfirmButton: false,
-                background:"#433151",
-                color:"#9e75f0",
-            })
-            setGroupChanges([...groupChanges,id])
-        }
-        else {
+                background: "#433151",
+                color: "#9e75f0"
+            });
+            setGroupChanges([...groupChanges, id]);
+        } else {
             void router.push({
-                pathname: "/"+accessID});
+                pathname: "/" + accessID
+            });
         }
     };
 
     const handleChange = (change: string) => { // this sucks but the way tailwind wants to work on Vercel has forced my hand
         switch (change) {
             case "del":
-                if (deleteMode||massGroup) {
+                if (deleteMode || massGroup) {
                     setStyle("text-superCoolEdgyPurple");
                     setDeleteMode(false);
-                    setEditMode(false)
-                    setMassGroup(false)
-                    setDelText("Delete mode?")
+                    setEditMode(false);
+                    setMassGroup(false);
+                    setDelText("Delete mode?");
                     return;
                 }
-                if(editMode){
-                    setMassGroup(true)
-                    setEditMode(false)
+                if (editMode) {
+                    setMassGroup(true);
+                    setEditMode(false);
                     setStyle("text-orange-300");
-                }
-                else {
+                } else {
                     setStyle("text-red-400");
                     setDeleteMode(true);
-                    setEditMode(false)
-                    setMassGroup(false)
+                    setEditMode(false);
+                    setMassGroup(false);
                 }
                 break;
             case "edit":
                 if (editMode) {
                     setStyle("text-superCoolEdgyPurple");
                     setEditMode(false);
-                    setDelText("Delete Mode?")
+                    setDelText("Delete Mode?");
                 } else {
                     setStyle("text-green-400");
                     setEditMode(true);
-                    setDeleteMode(false)
-                    setDelText("Mass Edit Group")
+                    setDeleteMode(false);
+                    setDelText("Mass Edit Group");
                 }
                 break;
         }
     };
 
-    function handleGroup(newGroup: string){
+    function handleGroup(newGroup: string) {
         groupChanges.forEach(id => {
             updateGroup({
                 id: id,
                 group: newGroup
             });
-        })
+        });
         void Swal.fire({
-            title:"Successfully Changed groups",
-            text:"Redirecting...",
-            icon:"success",
+            title: "Successfully Changed groups",
+            text: "Redirecting...",
+            icon: "success",
             timer: 1000,
             showConfirmButton: false,
-            background:"#433151",
-            color:"#9e75f0",
-        }).then(_ =>{
-            void router.push("/groupSelect")
-        })
+            background: "#433151",
+            color: "#9e75f0"
+        }).then(_ => {
+            void router.push("/groupSelect");
+        });
 
     }
 
@@ -201,17 +199,18 @@ const PasteSelect: FC<ctx> = (ctx) => {
                         textData && !submitNewGroups ? (
                                 <div className="">
                                     <div className="h-[53vh]">
-                                        {textArr.map((paste, i) => { // Texts display
+                                        {textArr.sort((i, j) => new Date(j.lastModified).getTime() - new Date(i.lastModified).getTime()).map((paste, i) => { // Texts display
                                             return (
                                                 <div key={i} className="flex space-x-1.5 ">
-                                                    <div onClick={() => handleClick(textArr[i]!.text,textArr[i]!.id, textArr[i]!.accessID)}
-                                                         key={i} className="relative flex flex-col justify-center items-center bg-puddlePurple w-96
+                                                    <div
+                                                        onClick={() => handleClick(textArr[i]!.text, textArr[i]!.id, textArr[i]!.accessID)}
+                                                        key={i} className="relative flex flex-col justify-center items-center bg-puddlePurple w-96
                                     h-16 rounded-lg my-5 py-2 shadow-lg cursor-pointer hover:scale-110 transition duration-300">
                                                         <h1> {/*If text has title, use that, else: If length of text is over 30, put first 30 chars then "...", else put full string */}
-                                                            {textArr[i]?.title || (textArr[i]!.text?.length > 30 ? `${textArr[i]?.text?.substring(0, 30) as string} ... ` : textArr[i]?.text)}
+                                                            {textArr[i]?.title || (textArr[i]!.text?.length > 30 ? `${textArr[i]?.text?.substring(0, 30) as string}... ` : textArr[i]?.text)}
                                                         </h1>
 
-                                                        <h1 className="my-2">{new Date(textArr[i]!.createdAt).toLocaleString()}</h1>
+                                                        <h1 className="my-2">{textArr[i]?.lastModified.getTime() === textArr[i]?.createdAt.getTime() ? "Created" : "Modified"} at {new Date(textArr[i]!.lastModified).toLocaleString()}</h1>
                                                     </div>
                                                 </div>
                                             );
@@ -234,8 +233,9 @@ const PasteSelect: FC<ctx> = (ctx) => {
 
                                     <div className="my-5 space-x-10 ">
 
-                                        <ReusableButton text={delText} onClick={() => handleChange("del")} overrideHoverTextColour={"red"}/>
-                                        <ReusableButton text={"Edit Mode?"} onClick={() => handleChange("edit")}/>
+                                        <ReusableButton text={delText} onClick={() => handleChange("del")}
+                                                        overrideHoverTextColour={"red"} />
+                                        <ReusableButton text={"Edit Mode?"} onClick={() => handleChange("edit")} />
 
                                     </div>
 
@@ -244,7 +244,8 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                                 onClick={() => void router.push({ pathname: "groupSelect" }, "groupSelect")}>Return
                                         </button>
 
-                                        {massGroup && <ReusableButton text={"apply changes"} onClick={() => setSubmitNewGroups(true)} />}
+                                        {massGroup && <ReusableButton text={"apply changes"}
+                                                                      onClick={() => setSubmitNewGroups(true)} />}
                                     </div>
 
 
@@ -252,7 +253,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                             )
                             :
                             submitNewGroups ?
-                                <EditGroupSelect groups={groups} handleGroupChange={handleGroup}/>
+                                <EditGroupSelect groups={groups} handleGroupChange={handleGroup} />
                                 :
                                 <h1>Loading</h1>
                     }

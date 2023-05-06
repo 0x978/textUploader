@@ -67,14 +67,15 @@ model VerificationToken {
 }
 
 model paste {
-  id        String   @id @default(cuid())
-  accessID  String   @unique @default(cuid())
-  title     String?  @db.Text
-  createdAt DateTime @default(now())
-  text      String   @db.Text
-  group     String   @default("none") @db.Text
-  author    User?    @relation(fields: [userID], references: [id], onDelete: Cascade)
-  userID    String?
-  isPrivate Boolean  @default(false)
-  views     Int      @default(0)
+  id           String   @id @default(cuid())
+  accessID     String   @unique @default(cuid())
+  title        String?  @db.Text
+  createdAt    DateTime @default(now())
+  lastModified DateTime @default(now())
+  text         String   @db.Text
+  group        String   @default("none") @db.Text
+  author       User?    @relation(fields: [userID], references: [id], onDelete: Cascade)
+  userID       String?
+  isPrivate    Boolean  @default(false)
+  views        Int      @default(0)
 }

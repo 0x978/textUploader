@@ -45,10 +45,12 @@ const TextEdit: FC<textEditProps> = ({ id}) => {
     });
 
     const submitChanges = () => {
+        const time = new Date()
         if(textData){
             updateText({
                 text: text,
-                id: textData?.id
+                id: textData?.id,
+                date: new Date()
             });
         }
     };

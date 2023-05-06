@@ -185,16 +185,18 @@ export const textRouter = createTRPCRouter({
     updateText: protectedProcedure
         .input(z.object({
             id: z.string(),
-            text: z.string()
+            text: z.string(),
+            date: z.date()
         }))
-        .mutation(async ({ input: { id, text }, ctx: { prisma } }) => {
+        .mutation(async ({ input: { id, text ,date}, ctx: { prisma } }) => {
             try {
                 return await prisma.paste.update({
                     where: {
-                        id: id
+                        id: id,
                     },
                     data: {
-                        text: text
+                        text: text,
+                        lastModified: date,
                     }
                 });
             } catch (error) {
