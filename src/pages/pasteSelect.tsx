@@ -21,7 +21,7 @@ interface ctx {
 const PasteSelect: FC<ctx> = (ctx) => {
     const router = useRouter();
     const [min, setMin] = useState<number>(0);
-    const [textArr, setTextArr] = useState<paste[]>([]);
+    const [paginatedPasteArr, setPaginatedPasteArr] = useState<paste[]>([]);
     const [deleteMode, setDeleteMode] = useState<boolean>(false);
     const [editMode, setEditMode] = useState<boolean>(false);
     const [style, setStyle] = useState<string>("text-superCoolEdgyPurple");
@@ -29,6 +29,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
     const [delText, setDelText] = useState<string>("Delete Mode?");
     const [massGroup, setMassGroup] = useState<boolean>(false);
     const [submitNewGroups, setSubmitNewGroups] = useState<boolean>(false);
+    const [groupPastes, setGroupPastes] = useState<paste[]>();
 
     const [paginatedGroups, setPaginatedGroups] = useState<string[]>([]);
     const [groups, setGroups] = useState<string[]>([]);
@@ -52,9 +53,13 @@ const PasteSelect: FC<ctx> = (ctx) => {
         }
     });
 
-    const { data: textData } = api.text.getAllTextByGroup.useQuery<paste[]>({
+     api.text.getAllTextByGroup.useQuery<paste[]>({
         group: ctx.group,
         userID: ctx.user.id
+    }, {
+        onSuccess(res){
+            setGroupPastes(res)
+        }
     });
 
     const { mutate: deleteItem } = api.text.deleteText.useMutation({
@@ -69,15 +74,17 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 background: "#433151",
                 color: "#9e75f0"
             });
-            setTextArr(prevState => prevState.filter((q) => q.id !== deletedPost.id));
+            if (groupPastes) {
+                setGroupPastes(prevState => prevState?.filter((q) => q.id !== deletedPost.id))
+            }
         }
     });
 
     useEffect(() => {
-        if (textData) {
-            setTextArr(textData?.slice(min, min + 5));
+        if (groupPastes) {
+            setPaginatedPasteArr(groupPastes?.slice(min, min + 5));
         }
-    }, [textData, min]);
+    }, [groupPastes, min]);
 
     const handleClick = (text: string, id: string, accessID: string) => {
         if (deleteMode) {
@@ -94,7 +101,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
             }).then((result) => {
                 if (result.isConfirmed) {
                     deleteItem({ id: id });
-                    if (textArr.length === 1) {
+                    if (paginatedPasteArr.length === 1) {
                         setMin(min === 0 ? prevState => prevState + 5 : prevState => prevState - 5);
                     }
                 }
@@ -196,21 +203,21 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 <h1 className="font-bold text-3xl my-5 ">Texts:</h1>
                 <div className="">
                     {
-                        textData && !submitNewGroups ? (
+                        groupPastes && !submitNewGroups ? (
                                 <div className="">
                                     <div className="h-[53vh]">
-                                        {textArr.sort((i, j) => new Date(j.lastModified).getTime() - new Date(i.lastModified).getTime()).map((paste, i) => { // Texts display
+                                        {paginatedPasteArr.sort((i, j) => new Date(j.lastModified).getTime() - new Date(i.lastModified).getTime()).map((paste, i) => { // Texts display
                                             return (
                                                 <div key={i} className="flex space-x-1.5 ">
                                                     <div
-                                                        onClick={() => handleClick(textArr[i]!.text, textArr[i]!.id, textArr[i]!.accessID)}
+                                                        onClick={() => handleClick(paginatedPasteArr[i]!.text, paginatedPasteArr[i]!.id, paginatedPasteArr[i]!.accessID)}
                                                         key={i} className="relative flex flex-col justify-center items-center bg-puddlePurple w-96
                                     h-16 rounded-lg my-5 py-2 shadow-lg cursor-pointer hover:scale-110 transition duration-300">
                                                         <h1> {/*If text has title, use that, else: If length of text is over 30, put first 30 chars then "...", else put full string */}
-                                                            {textArr[i]?.title || (textArr[i]!.text?.length > 30 ? `${textArr[i]?.text?.substring(0, 30) as string}... ` : textArr[i]?.text)}
+                                                            {paginatedPasteArr[i]?.title || (paginatedPasteArr[i]!.text?.length > 30 ? `${paginatedPasteArr[i]?.text?.substring(0, 30) as string}... ` : paginatedPasteArr[i]?.text)}
                                                         </h1>
 
-                                                        <h1 className="my-2">{textArr[i]?.lastModified.getTime() === textArr[i]?.createdAt.getTime() ? "Created" : "Modified"} at {new Date(textArr[i]!.lastModified).toLocaleString()}</h1>
+                                                        <h1 className="my-2">{paginatedPasteArr[i]?.lastModified.getTime() === paginatedPasteArr[i]?.createdAt.getTime() ? "Created" : "Modified"} at {new Date(paginatedPasteArr[i]!.lastModified).toLocaleString()}</h1>
                                                     </div>
                                                 </div>
                                             );
@@ -226,7 +233,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                         <button
                                             className="w-40 bg-puddlePurple p-2  hover:-translate-y-1 transition duration-300"
                                             onClick={() => {
-                                                if ((min + 5 < textData.length)) setMin(prevState => prevState + 5);
+                                                if ((min + 5 < groupPastes.length)) setMin(prevState => prevState + 5);
                                             }}>Increment
                                         </button>
                                     </div>
