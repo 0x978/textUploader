@@ -44,9 +44,7 @@ const Id: FC<ctx> = (ctx) => {
 
     useEffect(() => {
         if(textData && !updated){
-            console.log(textData)
             const newViews = textData?.views +1
-            console.log(newViews)
             setUpdated(true)
             updateViews({
                 id: ctx.id,
@@ -63,6 +61,7 @@ const Id: FC<ctx> = (ctx) => {
                     <div className={"flex gap-x-3 mt-2 p-2"}>
                         <ReusableButton onClick={() => void router.push("/groupSelect")} text={"return"} isDangerous={true}/>
                         <ReusableButton onClick={handleCopy} text={"copy text"}/>
+                        <h1 className={"my-2"}>Views: {textData?.views}</h1>
                     </div>
 
                     <div className={"pt-5 font-sans"}>

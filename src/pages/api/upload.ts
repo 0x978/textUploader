@@ -27,7 +27,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                 text:data,
             }
         })
-        res.status(200).json({success:"true",url:"https://text.0x978.com/"+paste.id})
+        res.status(200).json({success:"true",url:"https://text.0x978.com/"+paste.accessID})
     }
     catch (e){
         //console.log(e)
