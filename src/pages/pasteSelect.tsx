@@ -53,12 +53,12 @@ const PasteSelect: FC<ctx> = (ctx) => {
         }
     });
 
-     api.text.getAllTextByGroup.useQuery<paste[]>({
+    api.text.getAllTextByGroup.useQuery<paste[]>({
         group: ctx.group,
         userID: ctx.user.id
     }, {
-        onSuccess(res){
-            setGroupPastes(res)
+        onSuccess(res) {
+            setGroupPastes(res);
         }
     });
 
@@ -75,7 +75,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 color: "#9e75f0"
             });
             if (groupPastes) {
-                setGroupPastes(prevState => prevState?.filter((q) => q.id !== deletedPost.id))
+                setGroupPastes(prevState => prevState?.filter((q) => q.id !== deletedPost.id));
             }
         }
     });
@@ -247,11 +247,13 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                     </div>
 
                                     <div className={"space-x-10"}>
-                                        <button className={`bg-puddlePurple p-2 w-40 hover:text-orange-300`}
-                                                onClick={() => void router.push({ pathname: "groupSelect" }, "groupSelect")}>Return
-                                        </button>
+                                        {!massGroup ? <button className={`bg-puddlePurple p-2 w-40 hover:text-orange-300`}
+                                                             onClick={() => void router.push({ pathname: "groupSelect" }, "groupSelect")}>Return
+                                        </button> :
+                                        <ReusableButton text={"Cancel"} onClick={() => handleChange("del")} />
+                                        }
 
-                                        {massGroup && <ReusableButton text={"apply changes"}
+                                        {massGroup && <ReusableButton text={"Select Group"}
                                                                       onClick={() => setSubmitNewGroups(true)} />}
                                     </div>
 
