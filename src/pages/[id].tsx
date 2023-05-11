@@ -102,7 +102,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     if(!paste){
         return {
             redirect: {
-                destination: "/404",
+                destination: "/notFound",
                 permanent: false
             }
         };
