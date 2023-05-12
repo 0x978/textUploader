@@ -17,7 +17,9 @@ interface ctx {
         email: string;
     };
 }
-
+/* this page has grown to be pretty bad, as originally it was just used to display pastes to the user to select from.
+   Since then, I have added more and more features to it, including page system, deleting pastes, editing pastes, mass group selection etc.
+   this has caused the page to grow to get quite messy such that it is due a rewrite*/
 const PasteSelect: FC<ctx> = (ctx) => {
     const router = useRouter();
     const [min, setMin] = useState<number>(0);
@@ -37,7 +39,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
     const [minPageSize, setMinPageSize] = useState<number>(0);
     const { mutate: updateGroup } = api.text.updateGroup.useMutation();
 
-    api.text.getAllText.useQuery<paste[]>({ // fetches all texts, parsing their groups to display each available group. This is not sustainable
+    api.text.getAllText.useQuery<paste[]>({ // fetches all texts, parsing their groups to display each available group. This is not sustainable and also a bad idea.
         userID: ctx.user.id
     }, {
         onSuccess(res: paste[]) {
@@ -80,6 +82,23 @@ const PasteSelect: FC<ctx> = (ctx) => {
         }
     });
 
+    function handleMassGroupChange(){
+        if(groupChanges.length <= 0){
+            void Swal.fire({
+                title: "Selects some pastes first!",
+                position: "top",
+                toast: true,
+                icon: "warning",
+                timer: 1500,
+                showConfirmButton: false,
+                background: "#433151",
+                color: "#9e75f0"
+            });
+            return
+        }
+        setSubmitNewGroups(true)
+    }
+
     useEffect(() => {
         if (groupPastes) {
             setPaginatedPasteArr(groupPastes?.slice(min, min + 5));
@@ -117,6 +136,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
         } else if (massGroup) {
             void Swal.fire({
                 title: "Post successfully added to mass group change",
+                text: `Current size: ${groupChanges.length+1}`, // this is probably not a good idea, but will do until i rewrite this page to be more usable
                 position: "top",
                 toast: true,
                 icon: "success",
@@ -254,7 +274,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                         }
 
                                         {massGroup && <ReusableButton text={"Select Group"}
-                                                                      onClick={() => setSubmitNewGroups(true)} />}
+                                                                      onClick={() => handleMassGroupChange()} />}
                                     </div>
 
 
