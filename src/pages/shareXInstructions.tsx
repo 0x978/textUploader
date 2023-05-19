@@ -5,6 +5,11 @@ import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import Swal from "sweetalert2"
 import ReusableButton from "~/components/reusableButton";
+import { useState } from "react";
+import ShareXOne from "~/components/shareXOne";
+import ShareXTwo from "~/components/shareXTwo";
+import ShareXThree from "~/components/shareXThree";
+import ShareXFour from "~/components/shareXFour";
 
 interface ShareXInstructionsProps {
     user: {
@@ -16,6 +21,8 @@ interface ShareXInstructionsProps {
 
 
 const ShareXInstructions: FC<ShareXInstructionsProps> = ({ user }) => {
+    const [step,setStep] = useState<number>(1)
+
     const router = useRouter()
 
     const { data: userKey } = api.text.getUserKeyByID.useQuery<string>({ // Gets user key
@@ -62,13 +69,24 @@ const ShareXInstructions: FC<ShareXInstructionsProps> = ({ user }) => {
     return (
         <main className="flex h-screen text-center bg-deepPurple text-superCoolEdgyPurple">
             <div className="m-auto space-y-3">
-                <h1 className="text-3xl">ShareX instructions</h1>
-                <h1 className={"text-xl"}>Press the button below to copy config</h1>
-                <ReusableButton text={"Config"} onClick={() => copyConfig()} />
-                <h1>Then, right click shareX -{">"} custom uploader settings {">"} import {">"} from clipboard</h1>
-                <h1>Finally, set text uploader (in the bottom left) to &quot;0x978 - Text-Uploader&quot;</h1>
+                <h1 className="text-4xl">ShareX instructions: Step {step}</h1>
 
-                <ReusableButton text={"Return"} isDangerous={true} onClick={() => void router.push("/groupSelect")} />
+                {step === 1 &&
+                  <ShareXOne copyConfig={() => copyConfig()}/>}
+                {step === 2 &&
+                  <ShareXTwo/>}
+                {step === 3 &&
+                  <ShareXThree/>}
+                {step === 4 &&
+                  <ShareXFour/>}
+
+
+
+                <div className={"space-x-2"}>
+                    {step > 1 && <ReusableButton text={"Previous Step"} onClick={() => setStep(prevState => prevState-1)} />}
+                    {step <4 && <ReusableButton text={"Next Step"} onClick={() => setStep(prevState => prevState+1)} />}
+
+                </div>
             </div>
         </main>
     );
