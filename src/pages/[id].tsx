@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 interface ctx {
     password: string,
     id: string,
+    isUsersPaste:boolean,
 }
 
 const Id: FC<ctx> = (ctx) => {
@@ -59,7 +60,7 @@ const Id: FC<ctx> = (ctx) => {
                 <div className="space-y-5 px-5">
 
                     <div className={"flex gap-x-3 mt-2 p-2"}>
-                        <ReusableButton onClick={() => void router.push("/groupSelect")} text={"return"} isDangerous={true}/>
+                        <ReusableButton onClick={() => void router.push(ctx.isUsersPaste ? "/pasteSelect?group="+textData?.group : "/")} text={"return"} isDangerous={true}/>
                         <ReusableButton onClick={handleCopy} text={"copy text"}/>
                         <h1 className={"my-2"}>Views: {textData?.views}</h1>
                     </div>
@@ -119,7 +120,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
     return ({
         props: {
-            id: context.query.id
+            id: context.query.id,
+            isUsersPaste: auth?.user.id === paste.userID
         }
     });
 

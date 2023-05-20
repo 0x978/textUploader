@@ -116,6 +116,7 @@ export const textRouter = createTRPCRouter({
                         title:true,
                         createdAt:true,
                         views:true,
+                        group:true,
                     }
                 });
             } catch (error) {

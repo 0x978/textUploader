@@ -10,7 +10,7 @@ const ShareXTwo: FC = () => {
             <div className="m-auto">
                 <h1 className={"text-xl"}>Next, open the Taskbar Notification Area and select &quot;Custom Uploader Settings&quot;  </h1>
                 <div className={"flex justify-center"}>
-                    <Image src={StepTwo} alt={"Step Three of shareX"}  />
+                    <Image src={StepTwo} alt={"Step Three of shareX"} width={650} height={600}    />
                 </div>
             </div>
         </main>

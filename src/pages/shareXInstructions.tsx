@@ -85,8 +85,9 @@ const ShareXInstructions: FC<ShareXInstructionsProps> = ({ user }) => {
                 <div className={"space-x-2"}>
                     {step > 1 && <ReusableButton text={"Previous Step"} onClick={() => setStep(prevState => prevState-1)} />}
                     {step <4 && <ReusableButton text={"Next Step"} onClick={() => setStep(prevState => prevState+1)} />}
-
                 </div>
+                <ReusableButton text={"Return Home"} onClick={() => void router.push("/")}/>
+
             </div>
         </main>
     );
