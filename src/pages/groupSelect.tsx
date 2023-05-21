@@ -22,7 +22,8 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
     const [paginatedGroups, setPaginatedGroups] = useState<string[]>([]);
     const [groups, setGroups] = useState<string[]>([]);
     const [groupMap, setGroupMap] = useState<Map<string, number>>(new Map<string, number>);
-    const pageSize = 5;
+    const [pageSize,setPageSize] = useState<number>( 0)
+
     const [minPageSize, setMinPageSize] = useState<number>(0);
 
     const redirect = (group: string) => { // redirects user to paste selection when a group is selected.
@@ -46,11 +47,12 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
             const uniqueKeys = Array.from(uniqueGroup.keys());
             setGroups(uniqueKeys);
             setGroupMap(uniqueGroup);
-            setPaginatedGroups(uniqueKeys?.slice(minPageSize, 5));
+            setPaginatedGroups(uniqueKeys?.slice(minPageSize, pageSize));
         }
     });
 
     useEffect(() => {
+        setPageSize( window.innerHeight >= 750 ? 5 : 4) // Display less elements if on mobile devices
         setPaginatedGroups(groups?.slice(minPageSize, minPageSize + pageSize));
     }, [minPageSize]);
 
@@ -60,7 +62,7 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
             <main className="flex h-screen text-center bg-deepPurple text-superCoolEdgyPurple">
                 <div className="m-auto">
 
-                    <h1 className="font-bold text-3xl my-5 ">Select a category</h1>
+                    <h1 className="font-bold text-3xl my-5 ">Select a group</h1>
                     <ReusableButton text={"Create a New Paste"} overrideWidth={"large"} onClick={() => void router.push("submit")}/>
 
 
@@ -82,13 +84,13 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
                         className="my-5 space-x-10 "> {/* Div responsible for increment, decrement buttons for pagination */}
                         <button className="w-40 bg-puddlePurple p-2 hover:-translate-y-1 transition duration-300"
                                 onClick={() => {
-                                    if ((minPageSize - 5 >= 0)) setMinPageSize(prevState => prevState - 5);
+                                    if ((minPageSize - pageSize >= 0)) setMinPageSize(prevState => prevState - pageSize);
                                 }}>Decrement
                         </button>
 
                         <button className="w-40 bg-puddlePurple p-2  hover:-translate-y-1 transition duration-300"
                                 onClick={() => {
-                                    if ((minPageSize + 5 < groups.length)) setMinPageSize(prevState => prevState + 5);
+                                    if ((minPageSize + pageSize < groups.length)) setMinPageSize(prevState => prevState + pageSize);
                                 }}>Increment
                         </button>
                     </div>

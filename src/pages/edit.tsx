@@ -8,6 +8,7 @@ import EditGroupSelect from "~/components/editGroupSelect";
 import PasteMetadata from "~/components/pasteMetadata";
 import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
+import ReusableButton from "~/components/reusableButton";
 
 interface editProps {
     user: {
@@ -100,9 +101,7 @@ const Edit: FC<editProps> = ({ user }) => {
                                         <EditGroupSelect groups={groups} fetchedPaste={fetchedPaste}
                                                          handleNewGroup={handleNewGroup}
                                                          handleGroupChange={handleGroupChange} />
-                                        <button className="bg-puddlePurple w-24 hover:text-red-400 active:translate-y-1"
-                                                onClick={() => setEditGroupMode(false)}>Return
-                                        </button>
+                                        <ReusableButton text={"Return"} onClick={() => setEditGroupMode(false)}/>
                                     </div>
                                     : // if user is not currently in group edit mode, show the pastes' metadata
                                     <div>

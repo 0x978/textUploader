@@ -23,7 +23,7 @@ const EditGroupSelect: FC<EditGroupSelectProps> = ({ groups, fetchedPaste, handl
 
             {groups.filter(q => q !== fetchedPaste?.group).map((group, i) => { // map through each group, passed as props. Filtered as we don't want the user to be able to select the group that the paste already belongs to.
                     return (
-                        <div key={i} className="flex space-x-1.5" onClick={() => void handleGroupChange(group)}>
+                        <div key={i} className="flex space-x-1.5 w-80 md:w-full" onClick={() => void handleGroupChange(group)}>
                             <div key={i} className=" text-lg relative flex flex-col justify-center items-center bg-puddlePurple w-96
                                     h-16 rounded-lg my-5 py-2 shadow-lg cursor-pointer hover:scale-110 transition duration-300">
                                 <h1 className="m1-2 ">{group}</h1>

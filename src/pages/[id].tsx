@@ -56,26 +56,24 @@ const Id: FC<ctx> = (ctx) => {
 
     return (
         <>
-            <main className="flex h-screen bg-deepPurple text-white min-h-screen overflow-y-auto">
-                <div className="space-y-5 px-5">
-
-                    <div className={"flex gap-x-3 mt-2 p-2"}>
-                        <ReusableButton onClick={() => void router.push(ctx?.isUsersPaste && textData?.group ? `/pasteSelect?group=${textData?.group}` : `/`)} text={"return"} isDangerous={true}/>
-                        <ReusableButton onClick={handleCopy} text={"copy text"}/>
-                        <h1 className={"my-2"}>Views: {textData?.views}</h1>
+            <main className="flex flex-col h-screen bg-deepPurple text-white">
+                <div className="px-5 pt-2">
+                    <div className="flex gap-x-3 flex-wrap">
+                        <ReusableButton onClick={() => void router.push(ctx?.isUsersPaste && textData?.group ? `/pasteSelect?group=${textData?.group}` : `/`)} text="return" isDangerous={true} />
+                        <ReusableButton onClick={handleCopy} text="copy text" />
+                        <h1 className="my-2">Views: {textData?.views}</h1>
                     </div>
+                </div>
 
-                    <div className={"pt-5 font-sans"}>
+                <div className="flex-grow overflow-y-auto break-words">
+                    <div className="p-5 font-sans">
                         <pre className="whitespace-pre-wrap">{textData?.text}</pre>
                     </div>
-
-
-
                 </div>
             </main>
-
         </>
     );
+
 };
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {

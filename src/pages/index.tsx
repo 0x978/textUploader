@@ -31,15 +31,15 @@ const Home: NextPage = () => {
             </Head>
 
             <main className="flex items-center justify-center min-h-screen bg-deepPurple text-superCoolEdgyPurple ">
-                <div className="flex h-screen text-center">
+                <div className="flex text-center">
 
-                    <div className="m-auto">
+                    <div className="mx-auto w-80 md:w-full ">
                         <h1 className="font-bold text-4xl my-5">ShareX Text Uploader</h1>
 
                         <h1 className="font-bold text-2xl my-5">Please sign in with an Auth Provider:</h1>
 
-                        <div className="flex flex-col space-y-2">
-                            <button className={"bg-puddlePurple p-2 text-xl"}
+                        <div className="flex flex-col space-y-2 ">
+                            <button className={"bg-puddlePurple p-2 text-xl "}
                                     onClick={() => void signIn("discord")}>Discord
                             </button>
                             <button className={"bg-puddlePurple p-2 text-xl"}

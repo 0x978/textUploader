@@ -83,18 +83,18 @@ const CustomURL: FC = () => {
 
 
     return(
-        <main className="flex h-screen text-center bg-deepPurple text-superCoolEdgyPurple ">
-            <div className="m-auto">
+        <main className="flex h-screen text-center bg-deepPurple text-superCoolEdgyPurple">
+            <div className="m-auto ">
                 <h1 className={"text-3xl"}>Custom URL</h1>
                 <h1 className={"text-xl my-3"}>Here you can set a custom URL that is more memorable than the default URL</h1>
                 <h1 className={"text-xl my-3"}>This URL needs to be Unique!</h1>
 
 
-                <h1>Current URL: www.text.0x978.com/{URLValue}</h1>
-                <div className={"flex flex-col my-5 space-y-4 justify-center text-center items-center"}>
-                    <input className={"bg-puddlePurple w-96"} onChange={(e) => setURLValue(e.target.value)}/>
+                <h1 className={"text-xl break-all text-green-300"}>Current URL: www.text.0x978.com/{URLValue}</h1>
+                <div className={"flex flex-col mx-auto my-5 space-y-4 justify-center text-center items-center w-80 md:w-full"}>
+                    <input className={"bg-puddlePurple w-80 md:w-1/2 "} onChange={(e) => setURLValue(e.target.value)}/>
                     <ReusableButton text={"Submit"} onClick={() => updateURL()} />
-                    <ReusableButton text={"Return"} onClick={() => void router.push("/edit?accessID="+URLValue)} />
+                    <ReusableButton text={"Return"} onClick={() => void router.push("/edit?accessID="+initialURL)} />
                 </div>
             </div>
         </main>

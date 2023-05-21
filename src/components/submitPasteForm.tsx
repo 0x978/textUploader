@@ -44,13 +44,13 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate
             {!groupSelectMode ?
                 <form className="space-y-3 flex flex-col justify-center text-center items-center">
                     <h1>Paste Title</h1>
-                    <input onChange={(e) => setTitle(e.target.value)} className="bg-puddlePurple w-96 p-1" />
+                    <input onChange={(e) => setTitle(e.target.value)} className="bg-puddlePurple w-full md:w-96 p-1" />
                     <h1>Paste group</h1>
                     {groups && <ReusableButton text={"select group"} onClick={() => setGroupSelectMode(true)} />}
-                    <input placeholder={group} onChange={(e) => setGroup(e.target.value)} className="bg-puddlePurple w-96 p-1" />
+                    <input placeholder={group} onChange={(e) => setGroup(e.target.value)} className="bg-puddlePurple w-full md:w-96 p-1" />
                     <h1>Paste Text</h1>
                     <textarea onChange={(e) => setText(e.target.value)}
-                              className="bg-puddlePurple resize min-h-[7rem] w-96" />
+                              className="bg-puddlePurple resize min-h-[7rem] w-full md:w-96" />
 
                     <div className={"flex flex-col space-y-3  text-center"}>
                         <ReusableButton text={"Set as private paste"} onClick={(e) => togglePrivate(e, isPrivate)}

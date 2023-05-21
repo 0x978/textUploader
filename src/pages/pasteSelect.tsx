@@ -17,6 +17,7 @@ interface ctx {
         email: string;
     };
 }
+
 /* this page has grown to be pretty bad, as originally it was just used to display pastes to the user to select from.
    Since then, I have added more and more features to it, including page system, deleting pastes, editing pastes, mass group selection etc.
    this has caused the page to grow to get quite messy such that it is due a rewrite*/
@@ -82,8 +83,8 @@ const PasteSelect: FC<ctx> = (ctx) => {
         }
     });
 
-    function handleMassGroupChange(){
-        if(groupChanges.length <= 0){
+    function handleMassGroupChange() {
+        if (groupChanges.length <= 0) {
             void Swal.fire({
                 title: "Selects some pastes first!",
                 position: "top",
@@ -94,14 +95,16 @@ const PasteSelect: FC<ctx> = (ctx) => {
                 background: "#433151",
                 color: "#9e75f0"
             });
-            return
+            return;
         }
-        setSubmitNewGroups(true)
+        setSubmitNewGroups(true);
     }
 
     useEffect(() => {
+        const windowHeight = window.innerHeight;
+        const itemCount = windowHeight >= 750 ? 5 : 4
         if (groupPastes) {
-            setPaginatedPasteArr(groupPastes?.slice(min, min + 5));
+            setPaginatedPasteArr(groupPastes?.slice(min, min + itemCount));
         }
     }, [groupPastes, min]);
 
@@ -136,7 +139,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
         } else if (massGroup) {
             void Swal.fire({
                 title: "Post successfully added to mass group change",
-                text: `Current size: ${groupChanges.length+1}`, // this is probably not a good idea, but will do until i rewrite this page to be more usable
+                text: `Current size: ${groupChanges.length + 1}`, // this is probably not a good idea, but will do until i rewrite this page to be more usable
                 position: "top",
                 toast: true,
                 icon: "success",
@@ -225,14 +228,15 @@ const PasteSelect: FC<ctx> = (ctx) => {
                     {
                         groupPastes && !submitNewGroups ? (
                                 <div className="">
-                                    <div className="h-[53vh]">
+                                    <div className="h-1/2">
                                         {paginatedPasteArr.sort((i, j) => new Date(j.lastModified).getTime() - new Date(i.lastModified).getTime()).map((paste, i) => { // Texts display
                                             return (
                                                 <div key={i} className="flex space-x-1.5 ">
                                                     <div
                                                         onClick={() => handleClick(paginatedPasteArr[i]!.text, paginatedPasteArr[i]!.id, paginatedPasteArr[i]!.accessID)}
-                                                        key={i} className="relative flex flex-col justify-center items-center bg-puddlePurple w-96
-                                    h-16 rounded-lg my-5 py-2 shadow-lg cursor-pointer hover:scale-110 transition duration-300">
+                                                        key={i}
+                                                        className="relative flex flex-col justify-center items-center bg-puddlePurple w-full md:w-96 h-16 rounded-lg my-5
+                                                        py-2 shadow-lg cursor-pointer hover:scale-110 transition duration-300">
                                                         <h1> {/*If text has title, use that, else: If length of text is over 30, put first 30 chars then "...", else put full string */}
                                                             {paginatedPasteArr[i]?.title || (paginatedPasteArr[i]!.text?.length > 30 ? `${paginatedPasteArr[i]?.text?.substring(0, 30) as string}... ` : paginatedPasteArr[i]?.text)}
                                                         </h1>
@@ -258,7 +262,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                         </button>
                                     </div>
 
-                                    <div className="my-5 space-x-10 ">
+                                    <div className="my-3 space-x-10 ">
 
                                         <ReusableButton text={delText} onClick={() => handleChange("del")}
                                                         overrideHoverTextColour={"red"} />
@@ -268,9 +272,9 @@ const PasteSelect: FC<ctx> = (ctx) => {
 
                                     <div className={"space-x-10"}>
                                         {!massGroup ? <button className={`bg-puddlePurple p-2 w-40 hover:text-orange-300`}
-                                                             onClick={() => void router.push({ pathname: "groupSelect" }, "groupSelect")}>Return
-                                        </button> :
-                                        <ReusableButton text={"Cancel"} onClick={() => handleChange("del")} />
+                                                              onClick={() => void router.push({ pathname: "groupSelect" }, "groupSelect")}>Return
+                                            </button> :
+                                            <ReusableButton text={"Cancel"} onClick={() => handleChange("del")} />
                                         }
 
                                         {massGroup && <ReusableButton text={"Select Group"}
