@@ -39,6 +39,8 @@ const PasteSelect: FC<ctx> = (ctx) => {
     const [groupMap, setGroupMap] = useState<Map<string, number>>(new Map<string, number>);
     const [minPageSize, setMinPageSize] = useState<number>(0);
     const { mutate: updateGroup } = api.text.updateGroup.useMutation();
+    const [fetched,setFetched] = useState<boolean>(false)
+
 
     api.text.getAllText.useQuery<paste[]>({ // fetches all texts, parsing their groups to display each available group. This is not sustainable and also a bad idea.
         userID: ctx.user.id
@@ -61,7 +63,8 @@ const PasteSelect: FC<ctx> = (ctx) => {
         userID: ctx.user.id
     }, {
         onSuccess(res) {
-            setGroupPastes(res);
+            setGroupPastes(res.sort((i, j) => new Date(j.lastModified).getTime() - new Date(i.lastModified).getTime()));
+            setFetched(true)
         }
     });
 
@@ -213,6 +216,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
         });
 
     }
+    console.log(groupPastes)
 
     return <>
         <Head>
@@ -223,13 +227,13 @@ const PasteSelect: FC<ctx> = (ctx) => {
 
         <main className={`flex h-screen text-center bg-deepPurple ${style}`}>
             <div className="m-auto">
-                <h1 className="font-bold text-3xl my-5 ">Texts:</h1>
+                <h1 className="font-bold text-3xl my-5 ">Pastes:</h1>
                 <div className="">
                     {
-                        groupPastes && !submitNewGroups ? (
+                        groupPastes && groupPastes.length > 0 &&  !submitNewGroups ? (
                                 <div className="">
                                     <div className="h-1/2">
-                                        {paginatedPasteArr.sort((i, j) => new Date(j.lastModified).getTime() - new Date(i.lastModified).getTime()).map((paste, i) => { // Texts display
+                                        {paginatedPasteArr.map((paste, i) => { // Texts display
                                             return (
                                                 <div key={i} className="flex space-x-1.5 ">
                                                     <div
@@ -288,7 +292,15 @@ const PasteSelect: FC<ctx> = (ctx) => {
                             submitNewGroups ?
                                 <EditGroupSelect groups={groups} handleGroupChange={handleGroup} />
                                 :
-                                <h1>Loading</h1>
+                                fetched ?
+                                    <div className={"space-y-3 flex flex-col items-center "}>
+                                        <h1>Error fetching pastes, it is possible you have no pastes under this category.</h1>
+                                        <h1>If you believe this to be in error please report this on GitHub</h1>
+                                        <a href={"https://github.com/0x978/textUploader/issues/new"} className={"text-green-400 underline"}>Leave Feedback</a>
+                                        <ReusableButton text={"Return"} onClick={() => void router.push("/")}/>
+                                    </div>
+                                    :
+                                    <h1>Loading</h1>
                     }
                 </div>
             </div>

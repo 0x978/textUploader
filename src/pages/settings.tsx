@@ -121,7 +121,7 @@ const Settings: FC<SettingsProps> = ({ user }) => {
                     <div className={"my-2"}>
                         {toggleKey ?
                             <div className={"my-5 space-y-3"}>
-                                <h1>Do not share this key with anyone, as it allows people to upload pastes as you!</h1>
+                                <h1 className={"text-red-400"}>Do not share this key with anyone, as it allows people to upload pastes as you!</h1>
                                 <h1>{userKey && !modifiedKey ? userKey.key : modifiedKey}</h1>
                             </div> :
 
