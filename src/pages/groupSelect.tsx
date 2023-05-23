@@ -6,7 +6,8 @@ import { useRouter } from "next/router";
 import { getServerAuthSession } from "~/server/auth";
 import GroupDisplay from "~/components/groupDisplay";
 import ReusableButton from "~/components/reusableButton";
-
+import swal from "sweetalert2"
+import Swal from "sweetalert2";
 interface GroupSelectProps {
     user: {
         id: string;
@@ -23,8 +24,9 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
     const [groups, setGroups] = useState<string[]>([]);
     const [groupMap, setGroupMap] = useState<Map<string, number>>(new Map<string, number>);
     const [pageSize,setPageSize] = useState<number>( 0)
-
+    const [editMode,setEditMode] = useState<boolean>(false)
     const [minPageSize, setMinPageSize] = useState<number>(0);
+    const { mutate: updateGroupName } = api.text.updateGroupName.useMutation();
 
     const redirect = (group: string) => { // redirects user to paste selection when a group is selected.
         void router.push({
@@ -56,10 +58,61 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
         setPaginatedGroups(groups?.slice(minPageSize, minPageSize + pageSize));
     }, [minPageSize]);
 
+    async function defineClickAction(group:string){
+        if(editMode){
+            const { value: newGroup } = await Swal.fire<string>({
+                title:`Enter a new name for the group "${group}"`,
+                icon: "question",
+                input: "text",
+                background:"#433151",
+                color:"#9e75f0",
+            });
+            if(newGroup){
+                updateGroupName({
+                    id:user.id,
+                    oldGroup:group,
+                    newGroup:newGroup,
+                })
+                void swal.fire({
+                    title: "Success",
+                    text: "Group name changed, please refresh to see results.",
+                    icon: "success" ,
+                    timer: 1300,
+                    toast: true,
+                    position: "top",
+                    showConfirmButton: false,
+                    background:"#433151",
+                    color:"#9e75f0",
+                })
+                setEditMode(false)
+                setPaginatedGroups(prevState => prevState.map(g => g === group ? g = newGroup : g))
+            }
+        }
+        else{
+            redirect(group)
+        }
+    }
+
+    function handleEditSwap(){
+        setEditMode(prevState => !prevState)
+        void swal.fire({
+            title:editMode ? "Set to selection mode" : "Set to edit mode",
+            text: editMode ? "Selection mode enabled" : "Edit mode enabled",
+            icon: "warning" ,
+            timer: 1300,
+            toast: true,
+            position: "top",
+            showConfirmButton: false,
+            background:"#433151",
+            color:"#9e75f0",
+        })
+
+    }
+
 
     return (
         <>
-            <main className="flex h-screen text-center bg-deepPurple text-superCoolEdgyPurple">
+            <main className={`flex h-screen text-center bg-deepPurple ${editMode ? "text-green-400" : "text-superCoolEdgyPurple"}`}>
                 <div className="m-auto">
 
                     <h1 className="font-bold text-3xl my-5 ">Select a group</h1>
@@ -74,7 +127,7 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
                                 <h1 className="my-5">You have no pastes</h1>
                                 : // If user does have pastes, handle this in components/groupDisplay.tsx
                                 <GroupDisplay paginatedGroups={paginatedGroups} groupMap={groupMap}
-                                              redirect={redirect} />
+                                              redirect={defineClickAction} />
                             }
                         </div>
                     }
@@ -95,10 +148,12 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
                         </button>
                     </div>
 
-                    <div className={"space-x-10"}>
+                    <div className={"space-x-10 my-3"}>
                         <ReusableButton text={"User Settings"} onClick={() => void router.push("/settings")} />
                         <ReusableButton text={"ShareX Steps"}  onClick={() => void router.push("/shareXInstructions")} />
                     </div>
+
+                    <ReusableButton isDangerous={editMode} text={"Rename group"} onClick={() => handleEditSwap()} />
 
                 </div>
             </main>

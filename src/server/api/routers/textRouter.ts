@@ -252,6 +252,29 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
+    updateGroupName: protectedProcedure
+        .input(z.object({
+            id: z.string(),
+            oldGroup: z.string(),
+            newGroup:z.string(),
+        }))
+        .mutation(async ({ input: { id, oldGroup,newGroup}, ctx: { prisma } }) => {
+            try {
+                return await prisma.paste.updateMany({
+                    where: {
+                        userID: id,
+                        group:oldGroup,
+                    },
+                    data: {
+                        group: newGroup
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+                throw new Error("Failed to fetch");
+            }
+        }),
+
     updateViews: publicProcedure
         .input(z.object({
             id: z.string(),
