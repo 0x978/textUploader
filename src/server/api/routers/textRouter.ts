@@ -1,4 +1,4 @@
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, isAllowedProcedure, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 
 export const textRouter = createTRPCRouter({
@@ -67,7 +67,7 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
-    deleteText: protectedProcedure
+    deleteText: isAllowedProcedure
         .input(z.object({
             id: z.string()
         }))

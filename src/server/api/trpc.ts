@@ -20,8 +20,15 @@ import { type Session } from "next-auth";
 import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
 
+interface body{
+    json:{
+        id:string
+    }
+}
+
 type CreateContextOptions = {
     session: Session | null;
+    body: body[]
 };
 
 /**
@@ -37,7 +44,8 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
     return {
         session: opts.session,
-        prisma
+        prisma,
+        body: opts.body
     };
 };
 
@@ -52,9 +60,10 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 
     // Get the session from the server using the getServerSession wrapper function
     const session = await getServerAuthSession({ req, res });
-
+    const body = req.body as body[];
     return createInnerTRPCContext({
-        session
+        session,
+        body: body
     });
 };
 
@@ -118,3 +127,34 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+// VERY HACKY MIDDLEWARE. Intercepts request headers from the POST request and inspects whether the user's id matches the id of the user who posted the post.
+// This feels like very much not the way to do this, but I really can't find any resources on how to conduct this better within TRPC. Should probably use an API route next time
+const isAllowed = t.middleware(async ({ ctx, next }) => {
+    if (!ctx.session || !ctx.session.user || !ctx?.body) {
+        throw new TRPCError({ code: "BAD_REQUEST" });
+    }
+    const requesterID = ctx.session.user.id;
+
+    console.log(ctx?.body);
+
+    const posterDetails = await prisma.paste.findUnique({
+        where: {
+            id: ctx?.body[0]?.json?.id
+        },
+        select: {
+            userID: true
+        }
+    });
+
+    if (!posterDetails || posterDetails.userID !== requesterID) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+
+    return next({
+        ctx: {
+            session: { ...ctx.session, user: ctx.session.user }
+        }
+    });
+});
+export const isAllowedProcedure = t.procedure.use(isAllowed);
