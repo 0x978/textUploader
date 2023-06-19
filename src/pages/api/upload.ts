@@ -16,6 +16,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         return
     }
 
+    const group = await groupfromUserID(userID) ?? "none"
+
     const type = z.string()
 
     try{
@@ -25,6 +27,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
             data:{
                 userID:userID,
                 text:data,
+                group:group,
             }
         })
         res.status(200).json({success:"true",url:"https://text.0x978.com/"+paste.accessID})
@@ -52,6 +55,29 @@ async function findUserIDFromKey(key:string):Promise<string | undefined>{
         }
         else{
             return userID.id
+        }
+    }
+    catch (e){
+        console.log(e)
+        return undefined;
+    }
+}
+
+async function groupfromUserID(id:string):Promise<string | undefined>{
+    try{
+        const data = await prisma.user.findUnique({
+            where:{
+                id:id
+            },
+            select:{
+                defaultPasteGroup:true
+            }
+        })
+        if(!data){
+            return "none"
+        }
+        else{
+            return data.defaultPasteGroup
         }
     }
     catch (e){

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import Swal from "sweetalert2"
 import ReusableButton from "~/components/reusableButton";
-import { useState } from "react";
+import React, { useState } from "react";
 import ShareXOne from "~/components/shareXOne";
 import ShareXTwo from "~/components/shareXTwo";
 import ShareXThree from "~/components/shareXThree";
@@ -83,7 +83,7 @@ const ShareXInstructions: FC<ShareXInstructionsProps> = ({ user }) => {
 
 
                 <div className={"space-x-2"}>
-                    {step > 1 && <ReusableButton text={"Previous Step"} onClick={() => setStep(prevState => prevState-1)} />}
+                    {step > 1 ? <ReusableButton text={"Previous Step"} onClick={() => setStep(prevState => prevState-1)}/> : <ReusableButton text={"Settings"} onClick={() => void router.push("/shareXSettings")}/> }
                     {step <4 && <ReusableButton text={"Next Step"} onClick={() => setStep(prevState => prevState+1)} />}
                 </div>
                 <ReusableButton text={"Return Home"} onClick={() => void router.push("/")}/>
