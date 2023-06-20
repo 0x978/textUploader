@@ -23,6 +23,9 @@ const Submit: FC<SubmitProps> = ({ user }) => {
         userID: user.id
     });
 
+    const{data:defaultGroup} = api.user.getUserDefaultGroup.useQuery<paste[]>({ // fetches all texts, parsing their groups to display each available group. This is not sustainable
+        userID: user.id })
+
     const { mutate: submitPaste } = api.text.submitPost.useMutation<paste>(
         {
             onSuccess: (data) => {
@@ -72,9 +75,9 @@ const Submit: FC<SubmitProps> = ({ user }) => {
 
     const handleSubmit = (e: MouseEvent<HTMLButtonElement>,title:string,group:string,text:string) => {
         e.preventDefault();
-        let parsedGroup: string = group;
+        let parsedGroup: string = group
         if (parsedGroup.length === 0) {
-            parsedGroup = "none";
+            parsedGroup = defaultGroup?.defaultPasteGroup ?? "none"
         }
 
         submitPaste({
@@ -90,7 +93,7 @@ const Submit: FC<SubmitProps> = ({ user }) => {
         <main className="flex min-h-screen  text-center bg-deepPurple text-superCoolEdgyPurple">
             <div className="m-auto">
                 <h1 className="font-bold text-3xl my-5">Submit a new paste</h1>
-                <SubmitPasteForm handleSubmit={handleSubmit} handlePrivate={togglePrivate} groups={([...new Set(groups?.map(r => r.group))])}/> {/*groups turned into set,then back to array to get unique elements in O(n) time */}
+                <SubmitPasteForm defaultGroup={defaultGroup?.defaultPasteGroup ?? "none"} handleSubmit={handleSubmit} handlePrivate={togglePrivate} groups={([...new Set(groups?.map(r => r.group))])}/> {/*groups turned into set,then back to array to get unique elements in O(n) time */}
             </div>
         </main>
     );

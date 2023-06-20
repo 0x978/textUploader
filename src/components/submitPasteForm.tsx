@@ -2,16 +2,18 @@ import { type FC, type MouseEvent, useState } from "react";
 import { useRouter } from "next/router";
 import ReusableButton from "~/components/reusableButton";
 import { useSession } from "next-auth/react";
+import ReusableReturnButton from "~/components/reusableReturnButton";
 
 interface SubmitPasteFormProps {
     handleSubmit: (e: MouseEvent<HTMLButtonElement>, title: string, group: string, text: string) => void;
     handlePrivate: () => void;
     groups?: string[];
+    defaultGroup: string;
 }
 
-const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate, groups }) => {
+const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate, groups,defaultGroup }) => {
     const [title, setTitle] = useState<string>("");
-    const [group, setGroup] = useState<string>("");
+    const [group, setGroup] = useState<string>(defaultGroup);
     const [text, setText] = useState<string>("");
     const [isPrivate, setIsPrivate] = useState<boolean>(false);
     const [buttonBackground, setButtonBackground] = useState<"red"|"green">("red");
@@ -59,8 +61,7 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate
                         <ReusableButton text={"Submit"}
                                         onClick={(e: MouseEvent<HTMLButtonElement>) => handleSubmit(e, title, group, text)}
                                         overrideWidth={"large"} />
-                        <ReusableButton text={"Return"} onClick={(e) => redirect(e)} overrideWidth={"large"}
-                                         overrideHoverTextColour={"red"}/>
+                        <ReusableReturnButton width={"large"} isDangerous={false}/>
                     </div>
                 </form>
 
@@ -77,7 +78,7 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate
                             </div>
                         );
                     })}
-                    <ReusableButton text={"Return"} onClick={() => setGroupSelectMode(false)}/>
+                    <ReusableReturnButton width={"large"}/>
                 </div>
             }
         </>

@@ -96,8 +96,8 @@ const GroupSelect: FC<GroupSelectProps> = ({ user }) => {
     function handleEditSwap(){
         setEditMode(prevState => !prevState)
         void swal.fire({
-            title:editMode ? "Set to selection mode" : "Set to edit mode",
-            text: editMode ? "Selection mode enabled" : "Edit mode enabled",
+            title:editMode ? "Set to selection mode" : "Set to Rename mode",
+            text: editMode ? "Selection mode enabled" : "Rename Group mode enabled",
             icon: "warning" ,
             timer: 1300,
             toast: true,

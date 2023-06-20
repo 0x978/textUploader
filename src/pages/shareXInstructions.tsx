@@ -10,6 +10,7 @@ import ShareXOne from "~/components/shareXOne";
 import ShareXTwo from "~/components/shareXTwo";
 import ShareXThree from "~/components/shareXThree";
 import ShareXFour from "~/components/shareXFour";
+import ReusableReturnButton from "~/components/reusableReturnButton";
 
 interface ShareXInstructionsProps {
     user: {
@@ -86,7 +87,7 @@ const ShareXInstructions: FC<ShareXInstructionsProps> = ({ user }) => {
                     {step > 1 ? <ReusableButton text={"Previous Step"} onClick={() => setStep(prevState => prevState-1)}/> : <ReusableButton text={"Settings"} onClick={() => void router.push("/shareXSettings")}/> }
                     {step <4 && <ReusableButton text={"Next Step"} onClick={() => setStep(prevState => prevState+1)} />}
                 </div>
-                <ReusableButton text={"Return Home"} onClick={() => void router.push("/")}/>
+                <ReusableReturnButton text={"Return Home"}/>
 
             </div>
         </main>

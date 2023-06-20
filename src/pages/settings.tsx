@@ -8,6 +8,7 @@ import type { paste } from ".prisma/client";
 import { nanoid } from "nanoid";
 import Swal from "sweetalert2";
 import ReusableButton from "~/components/reusableButton";
+import ReusableReturnButton from "~/components/reusableReturnButton";
 
 interface SettingsProps {
     user: {
@@ -136,7 +137,7 @@ const Settings: FC<SettingsProps> = ({ user }) => {
                     <ReusableButton text={"Reset Key"} isDangerous={true} onClick={() => handleChangeKey()}  overrideWidth={"large"}/>
                     <ReusableButton text={"Delete Account"} isDangerous={true} onClick={() => handleDeleteAccount()}  overrideWidth={"large"}/>
                     <ReusableButton text={"Logout"}  onClick={() => void logout()} overrideWidth={"large"} />
-                    <ReusableButton text={"Return"}  onClick={() => void router.push("/groupSelect")} overrideWidth={"large"} />
+                    <ReusableReturnButton width={"large"} isDangerous={false}/>
                 </div>
 
             </div>

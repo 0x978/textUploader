@@ -8,6 +8,7 @@ import { getServerAuthSession } from "~/server/auth";
 import Swal from "sweetalert2";
 import ReusableButton from "~/components/reusableButton";
 import EditGroupSelect from "~/components/editGroupSelect";
+import ReusableReturnButton from "~/components/reusableReturnButton";
 
 interface ctx {
     group: string,
@@ -297,7 +298,7 @@ const PasteSelect: FC<ctx> = (ctx) => {
                                         <h1>Error fetching pastes, it is possible you have no pastes under this category.</h1>
                                         <h1>If you believe this to be in error please report this on GitHub</h1>
                                         <a href={"https://github.com/0x978/textUploader/issues/new"} className={"text-green-400 underline"}>Leave Feedback</a>
-                                        <ReusableButton text={"Return"} onClick={() => void router.push("/")}/>
+                                        <ReusableReturnButton/>
                                     </div>
                                     :
                                     <h1>Loading</h1>

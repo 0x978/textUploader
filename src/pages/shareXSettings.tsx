@@ -6,6 +6,7 @@ import { getServerAuthSession } from "~/server/auth";
 import ReusableButton from "~/components/reusableButton";
 import { useRouter } from "next/router";
 import swal from "sweetalert2";
+import ReusableReturnButton from "~/components/reusableReturnButton";
 
 interface ShareXSettingsProps {
     user: {
@@ -53,7 +54,7 @@ const ShareXSettings: FC<ShareXSettingsProps> = ({user}) => {
                 <label className={"px-3"}>Default paste group:</label>
                 <input placeholder={group} onChange={(e) => setGroup(e.target.value)} className="bg-puddlePurple w-full md:w-96 p-1" />
                 <ReusableButton text={"Save Changes"} onClick={() => updateGroup({id:user.id,groupName:group})}  />
-                <ReusableButton text={"Return"} isDangerous={true} onClick={() => void router.push("/")} />
+                <ReusableReturnButton destination={"shareXInstructions"}/>
             </div>
         </main>
     )
