@@ -8,6 +8,8 @@ import ReusableButton from "~/components/reusableButton";
 import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 
 interface ctx {
@@ -67,7 +69,10 @@ const Id: FC<ctx> = (ctx) => {
 
                 <div className="flex-grow overflow-y-auto break-words">
                     <div className="p-5 font-sans">
-                        <pre className="whitespace-pre-wrap">{textData?.text}</pre>
+                        {textData?.text && <ReactMarkdown  remarkPlugins={[remarkGfm]}>
+                          textData?.text
+                        </ReactMarkdown>
+                        }
                     </div>
                 </div>
             </main>

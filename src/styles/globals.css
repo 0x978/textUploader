@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Markdown Editor CSS */
+.EasyMDEContainer {
+    background-color: #31233a !important;
+}
+
+.CodeMirror, .editor-preview {
+    color: #ad8bf3 !important;
+    background-color: #433151  !important;
+    text-align: left;
+}

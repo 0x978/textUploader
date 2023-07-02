@@ -1,8 +1,11 @@
-import { type FC, type MouseEvent, useState } from "react";
+import { type FC, type MouseEvent, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import ReusableButton from "~/components/reusableButton";
 import { useSession } from "next-auth/react";
 import ReusableReturnButton from "~/components/reusableReturnButton";
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), { ssr: false })
+import "easymde/dist/easymde.min.css";
+import dynamic from "next/dynamic";
 
 interface SubmitPasteFormProps {
     handleSubmit: (e: MouseEvent<HTMLButtonElement>, title: string, group: string, text: string) => void;
@@ -41,6 +44,13 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate
         setGroupSelectMode(false)
     }
 
+    const mdOptions = useMemo(() => {
+        return {
+            spellChecker: false,
+        }
+    }, [])
+
+
     return (
         <>
             {!groupSelectMode ?
@@ -51,8 +61,7 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate
                     {groups && <ReusableButton text={"select group"} onClick={() => setGroupSelectMode(true)} />}
                     <input placeholder={group} onChange={(e) => setGroup(e.target.value)} className="bg-puddlePurple w-full md:w-96 p-1" />
                     <h1>Paste Text</h1>
-                    <textarea onChange={(e) => setText(e.target.value)}
-                              className="bg-puddlePurple resize min-h-[7rem] w-full md:w-96" />
+                    <SimpleMDE value={text} onChange={(value) => setText(value)} options={mdOptions} />
 
                     <div className={"flex flex-col space-y-3  text-center"}>
                         <ReusableButton text={"Set as private paste"} onClick={(e) => togglePrivate(e, isPrivate)}
