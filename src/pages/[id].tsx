@@ -70,7 +70,7 @@ const Id: FC<ctx> = (ctx) => {
                 <div className="flex-grow overflow-y-auto break-words">
                     <div className="p-5 font-sans">
                         {textData?.text && <ReactMarkdown  remarkPlugins={[remarkGfm]}>
-                          textData?.text
+                            {textData?.text}
                         </ReactMarkdown>
                         }
                     </div>

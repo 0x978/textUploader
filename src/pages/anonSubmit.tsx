@@ -65,7 +65,7 @@ const AnonSubmit: FC = () => {
                 <h1 className="font-bold text-xl my-5">To save pastes, <span
                     className={"cursor-pointer text-green-400 underline"} onClick={() => void router.push("/")}>Login Now</span>
                 </h1>
-                <SubmitPasteForm handleSubmit={handleSubmit} handlePrivate={togglePrivate} defaultGroup={"none"} />
+                <SubmitPasteForm handleSubmit={handleSubmit} handlePrivate={togglePrivate}/>
             </div>
         </main>
     );
