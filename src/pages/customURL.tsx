@@ -63,7 +63,6 @@ const CustomURL: FC = () => {
         for(let i = 0; i < disallowedURLs.length;i++){
             const curr = disallowedURLs[i]
             if(typeof curr === "string" && URL.localeCompare(curr,"en",{sensitivity:`base`}) === 0){
-                console.log(curr,URL,URL.localeCompare(curr,"en",{sensitivity:`base`}))
                 void swal.fire({
                     title: "ERROR",
                     text: "The given URL matches a reserved page.",

@@ -73,7 +73,6 @@ const Submit: FC<SubmitProps> = ({ user }) => {
     const handleSubmit = (e: MouseEvent<HTMLButtonElement>,title:string,group:string,text:string) => {
         e.preventDefault();
 
-        console.log("group:",group)
         let parsedGroup = group
         if(parsedGroup.length === 0){
             parsedGroup = "none"

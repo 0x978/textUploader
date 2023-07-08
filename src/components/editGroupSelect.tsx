@@ -12,7 +12,6 @@ interface EditGroupSelectProps {
 }
 
 const EditGroupSelect: FC<EditGroupSelectProps> = ({ groups, fetchedPaste, handleNewGroup, handleGroupChange }) => {
-    console.log(groups)
     return (
         <div className="space-y-2">
             <h1 className="text-4xl my-4">Set group</h1>

@@ -58,7 +58,6 @@ async function findUserIDFromKey(key:string):Promise<string | undefined>{
         }
     }
     catch (e){
-        console.log(e)
         return undefined;
     }
 }
@@ -81,7 +80,6 @@ async function groupfromUserID(id:string):Promise<string | undefined>{
         }
     }
     catch (e){
-        console.log(e)
         return undefined;
     }
 }

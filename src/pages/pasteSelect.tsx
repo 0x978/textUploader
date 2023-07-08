@@ -217,7 +217,6 @@ const PasteSelect: FC<ctx> = (ctx) => {
         });
 
     }
-    console.log(groupPastes)
 
     return <>
         <Head>

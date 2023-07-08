@@ -282,7 +282,7 @@ export const textRouter = createTRPCRouter({
         }))
         .mutation(async ({ input: { id, updatedViewsCount }, ctx: { prisma } }) => {
             try {
-                return await prisma.paste.update({
+                await prisma.paste.update({
                     where: {
                         accessID: id
                     },

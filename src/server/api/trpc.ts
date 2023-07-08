@@ -136,7 +136,6 @@ const isAllowed = t.middleware(async ({ ctx, next }) => {
     }
     const requesterID = ctx.session.user.id;
 
-    console.log(ctx?.body);
 
     const posterDetails = await prisma.paste.findUnique({
         where: {

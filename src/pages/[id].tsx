@@ -10,12 +10,14 @@ import { prisma } from "~/server/db";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Swal from "sweetalert2";
 
 
 interface ctx {
     password: string,
-    id: string,
+    accessID: string,
     isUsersPaste:boolean,
+    postID: string|null,
 }
 
 const Id: FC<ctx> = (ctx) => {
@@ -23,10 +25,27 @@ const Id: FC<ctx> = (ctx) => {
     const [updated,setUpdated] = useState<boolean>(false)
 
     const { data: textData } = api.text.getPasteByIDPrivate.useQuery<paste[]>({
-        pasteAccessID: ctx.id
+        pasteAccessID: ctx.accessID
     });
 
+
     const { mutate: updateViews } = api.text.updateViews.useMutation();
+
+    const { mutate: deleteItem } = api.text.deleteText.useMutation({
+        onSuccess(deletedPost) {
+            void Swal.fire({
+                title: "Post successfully Deleted",
+                position: "top",
+                toast: true,
+                icon: "success",
+                timer: 1500,
+                showConfirmButton: false,
+                background: "#433151",
+                color: "#9e75f0"
+            });
+            void router.push("/")
+        }
+    });
 
 
     function handleCopy() {
@@ -50,7 +69,7 @@ const Id: FC<ctx> = (ctx) => {
             const newViews = textData?.views +1
             setUpdated(true)
             updateViews({
-                id: ctx.id,
+                id: ctx.accessID,
                 updatedViewsCount: newViews
             })
         }
@@ -63,6 +82,11 @@ const Id: FC<ctx> = (ctx) => {
                     <div className="flex gap-x-3 flex-wrap">
                         <ReusableButton onClick={() => void router.push(ctx?.isUsersPaste && textData?.group ? `/pasteSelect?group=${textData?.group}` : `/`)} text="return" isDangerous={true} />
                         <ReusableButton onClick={handleCopy} text="copy text" />
+                        {ctx.isUsersPaste && <ReusableButton text={"Delete Post"} isDangerous={true} onClick={() => {
+                            if(ctx.postID !== null){
+                                deleteItem({id:ctx.postID});
+                            }}}/>
+                        }
                         <h1 className="my-2">Views: {textData?.views}</h1>
                     </div>
                 </div>
@@ -97,6 +121,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         select:{
             userID: true,
             isPrivate: true,
+            id:true,
         },
         where:{
             accessID:context.query.id as string
@@ -123,8 +148,9 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
     return ({
         props: {
-            id: context.query.id,
-            isUsersPaste: auth?.user.id === paste.userID
+            accessID: context.query.id,
+            isUsersPaste: auth?.user.id === paste.userID,
+            postID: auth?.user.id === paste.userID ? paste.id : null
         }
     });
 

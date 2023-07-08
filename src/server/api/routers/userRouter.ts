@@ -23,6 +23,7 @@ export const userRouter = createTRPCRouter({
                 throw new Error("Failed to fetch");
             }
         }),
+
     updateDefaultGroup: protectedProcedure
         .input(z.object({
             id: z.string(),
