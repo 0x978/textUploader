@@ -18,6 +18,7 @@ interface ctx {
     accessID: string,
     isUsersPaste:boolean,
     postID: string|null,
+    visitorID: string|undefined,
 }
 
 const Id: FC<ctx> = (ctx) => {
@@ -28,6 +29,7 @@ const Id: FC<ctx> = (ctx) => {
         pasteAccessID: ctx.accessID
     });
 
+    const { mutate: reportPost } = api.text.reportPost.useMutation();
 
     const { mutate: updateViews } = api.text.updateViews.useMutation();
 
@@ -75,6 +77,39 @@ const Id: FC<ctx> = (ctx) => {
         }
     },[textData])
 
+    async function handlePasteReport(){
+        const { value: reportReason } = await Swal.fire<string>({
+            text: `You are reporting post ID: ${ctx.accessID}`,
+            title:`Please provide a short description for the reason for the report.`,
+            icon: "question",
+            input: "text",
+            background:"#433151",
+            color:"#9e75f0",
+        });
+        if(reportReason){
+            ctx.visitorID ? reportPost({postAccessID:ctx.accessID,reason:reportReason,reportingUserID:ctx?.visitorID}) :  reportPost({postAccessID:ctx.accessID,reason:reportReason})
+            void swal.fire({
+                title: "Successfully Reported Post",
+                text: "We will review the report as soon as possible.",
+                icon:"success",
+                showConfirmButton: true,
+                background:"#433151",
+                color:"#9e75f0",
+            });
+        }
+        else{
+            void swal.fire({
+                title: "Failed to report post!",
+                text: "Please provide a report reason.",
+                icon:"error",
+                showConfirmButton: true,
+                background:"#433151",
+                color:"#9e75f0",
+            });
+        }
+
+    }
+
     return (
         <>
             <main className="flex flex-col h-screen bg-deepPurple text-white">
@@ -82,10 +117,15 @@ const Id: FC<ctx> = (ctx) => {
                     <div className="flex gap-x-3 flex-wrap">
                         <ReusableButton onClick={() => void router.push(ctx?.isUsersPaste && textData?.group ? `/pasteSelect?group=${textData?.group}` : `/`)} text="return" isDangerous={true} />
                         <ReusableButton onClick={handleCopy} text="copy text" />
-                        {ctx.isUsersPaste && <ReusableButton text={"Delete Post"} isDangerous={true} onClick={() => {
+                        {ctx.isUsersPaste ? <ReusableButton text={"Delete Post"} isDangerous={true} onClick={() => {
                             if(ctx.postID !== null){
                                 deleteItem({id:ctx.postID});
-                            }}}/>
+                            }}}
+                        />
+                            :
+                            <ReusableButton text={"Report Post"} isDangerous={true} onClick={() => {
+                                void handlePasteReport()
+                            }} />
                         }
                         <h1 className="my-2">Views: {textData?.views}</h1>
                     </div>
@@ -150,7 +190,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         props: {
             accessID: context.query.id,
             isUsersPaste: auth?.user.id === paste.userID,
-            postID: auth?.user.id === paste.userID ? paste.id : null
+            postID: auth?.user.id === paste.userID ? paste.id : null,
+            visitorID: auth?.user.id || null
         }
     });
 

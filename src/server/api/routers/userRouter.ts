@@ -44,5 +44,6 @@ export const userRouter = createTRPCRouter({
                 throw new Error("Failed to update");
             }
         }),
+
 })
 

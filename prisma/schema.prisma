@@ -57,6 +57,7 @@ model User {
   post              paste[]
   key               String    @unique @default(cuid()) // TODO move to nanoID when prisma devs finish adding it
   defaultPasteGroup String    @default("none")
+  reports           report[]
 }
 
 model VerificationToken {
@@ -79,4 +80,14 @@ model paste {
   userID       String?
   isPrivate    Boolean  @default(false)
   views        Int      @default(0)
+  reports      report[]
+}
+
+model report {
+  id              String  @id @default(cuid())
+  postAccessID    String
+  reportedPaste   paste   @relation(fields: [postAccessID], references: [accessID])
+  reason          String
+  reportingUserID String?
+  reportingUser   User?   @relation(fields: [reportingUserID], references: [id])
 }

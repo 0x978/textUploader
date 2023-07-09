@@ -354,4 +354,26 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
+    reportPost: publicProcedure
+        .input(z.object({
+            postAccessID:z.string(),
+            reason: z.string(),
+            reportingUserID: z.string().optional(),
+        }))
+        .mutation(async ({ input: { postAccessID ,reason,reportingUserID}, ctx: { prisma } }) => {
+            try {
+                return await prisma.report.create({
+                    data: {
+                        postAccessID: postAccessID ,
+                        reason:reason,
+                        reportingUserID:reportingUserID
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+                throw new Error("Failed to post report");
+            }
+        }),
+
+
 });
