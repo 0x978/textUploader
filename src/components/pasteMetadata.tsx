@@ -19,7 +19,6 @@ const PasteMetadata: FC<PasteMetadataProps> = ({fetchedPaste,handleTitleUpdate,s
             pathname:"/textEdit",
             query:{
                 id:fetchedPaste.accessID,
-                pasteUser: fetchedPaste.userID
             }
         })
     }

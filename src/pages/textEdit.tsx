@@ -90,17 +90,6 @@ const TextEdit: FC<textEditProps> = ({ id}) => {
 export async function getServerSideProps(ctx: GetServerSidePropsContext) { // cant get middleware to work, so this will do for now
     const auth = await getServerAuthSession(ctx);
 
-    if (!auth || auth.user.id !== ctx.query.pasteUser) {
-        return {
-            redirect: {
-                destination: "/",
-                permanent: false
-            }
-        };
-    }
-
-    const user = auth.user;
-
     const paste = await prisma.paste.findUnique({
         select:{
             userID: true,
@@ -121,7 +110,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) { // ca
 
     return {
         props: {
-            user,
+            user: auth.user,
             id: ctx.query.id
         }
     };

@@ -109,7 +109,7 @@ const Id: FC<ctx> = (ctx) => {
         }
 
     }
-
+    console.log(ctx.postID)
     return (
         <>
             <main className="flex flex-col h-screen bg-deepPurple text-white">
@@ -117,6 +117,7 @@ const Id: FC<ctx> = (ctx) => {
                     <div className="flex gap-x-3 flex-wrap">
                         <ReusableButton onClick={() => void router.push(ctx?.isUsersPaste && textData?.group ? `/pasteSelect?group=${textData?.group}` : `/`)} text="return" isDangerous={true} />
                         <ReusableButton onClick={handleCopy} text="copy text" />
+                        {ctx.isUsersPaste && <ReusableButton text={"Edit Post"} onClick={() => void router.push(`/textEdit?id=${ctx.accessID}`)} />}
                         {ctx.isUsersPaste ? <ReusableButton text={"Delete Post"} isDangerous={true} onClick={() => {
                             if(ctx.postID !== null){
                                 deleteItem({id:ctx.postID});
