@@ -17,6 +17,8 @@ const FAQ: FC = ({}) => {
                     you can upload text using shareX, with the custom `text` config pointed to this site<br />
                     you can also upload text using the relevant feature once authenticated <br />
                     It&apos;s basically an edgier looking pastebin
+                    <br /> <br />
+                    Pastes also have markdown support <a className={"cursor-pointer text-green-400 underline"} href={"/markdown"}>an example of which you can see here</a>
                 </p>
 
                 <h1 className={"text-contrastingBlue"}>What data do you keep?</h1>

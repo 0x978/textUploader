@@ -13,3 +13,7 @@
     background-color: #433151  !important;
     text-align: left;
 }
+
+.override{
+    color: white !important;
+}
