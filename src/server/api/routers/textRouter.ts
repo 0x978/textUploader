@@ -1,5 +1,6 @@
 import { createTRPCRouter, isAllowedProcedure, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
+import logger from "~/components/API/logger";
 
 export const textRouter = createTRPCRouter({
     getAllText: protectedProcedure
@@ -216,6 +217,7 @@ export const textRouter = createTRPCRouter({
         }))
         .mutation(async ({ input: { title, group, text, userID,isPrivate}, ctx: { prisma } }) => {
             try {
+                await logger("Paste Submitted",true,[["USER ID",userID]])
                 return await prisma.paste.create({
                     data: {
                         title: title,
@@ -226,6 +228,7 @@ export const textRouter = createTRPCRouter({
                     }
                 });
             } catch (error) {
+                await logger("SUBMISSION ERROR",true,[["ERROR",error as string]])
                 console.error(error);
                 throw new Error("Failed to fetch");
             }
@@ -361,6 +364,7 @@ export const textRouter = createTRPCRouter({
             reportingUserID: z.string().optional(),
         }))
         .mutation(async ({ input: { postAccessID ,reason,reportingUserID}, ctx: { prisma } }) => {
+            await logger("REPORT SUBMITTED",true,[["REPORTING USER ID",reportingUserID ?? "NOT DEFINED"],["POST ACCESS ID",postAccessID],["REASON",reason]])
             try {
                 return await prisma.report.create({
                     data: {

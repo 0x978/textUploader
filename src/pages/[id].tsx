@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Swal from "sweetalert2";
+import logger from "~/components/API/logger";
+import fetchIPFromContext from "~/components/API/fetchIPFromContext";
 
 
 interface ctx {
@@ -171,6 +173,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     })
 
     if(!paste){
+        await logger("PASTE NOT FOUND",true,[["PASTE ACCESS ID",context.query.id as string],["USER ID",auth?.user.id as string ?? "NOT DEFINED"],["IP",fetchIPFromContext(context)]])
         return {
             redirect: {
                 destination: "/notFound",
@@ -180,6 +183,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     }
 
     if(!auth && paste.isPrivate || auth && paste.isPrivate && (paste.userID !== auth.user.id)){
+        await logger("ATTEMPT TO ACCESS PRIVATE PASTE",true,[["PASTE ACCESS ID",context.query.id as string],["USER ID",auth?.user.id as string ?? "NOT DEFINED"],["IP",fetchIPFromContext(context)]])
         return {
             redirect: {
                 destination: "/unauthorisedPasteAccess",

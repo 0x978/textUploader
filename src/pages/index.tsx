@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { getServerAuthSession } from "~/server/auth";
 import { useEffect, useState } from "react";
+import logger from "~/components/API/logger";
+import fetchIPFromContext from "~/components/API/fetchIPFromContext";
 
 interface countInterface {
     count: number;
@@ -74,6 +76,9 @@ const Home: NextPage = () => {
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     const session = await getServerAuthSession(ctx);
+
+
+    await logger("CONNECTION",false,[["IP",fetchIPFromContext(ctx)]])
 
     if (session) {
         return {

@@ -10,6 +10,7 @@ import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import logger from "~/components/API/logger";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -49,9 +50,9 @@ export const authOptions: NextAuthOptions = {
         }
     },
     events:{
-        signIn(message){
-           console.log("Is new user: " , message.isNewUser)
-       }
+        async signIn(message) {
+            await logger("LOGIN",true,[["IS NEW USER",message?.isNewUser?.toString() ?? "NOT DEFINED"]])
+        }
     },
     adapter: PrismaAdapter(prisma),
     providers: [
