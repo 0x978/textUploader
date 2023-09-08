@@ -192,6 +192,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         };
     }
 
+    await logger("PASTE ACCESSED",true,[["PASTE ACCESS ID",`/${context.query.id as string}`],["USER ID",auth?.user.id as string ?? "NOT DEFINED"],["IP",fetchIPFromContext(context)]])
     return ({
         props: {
             accessID: context.query.id,
