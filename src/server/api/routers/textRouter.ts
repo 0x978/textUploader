@@ -379,5 +379,26 @@ export const textRouter = createTRPCRouter({
             }
         }),
 
+    updatePastePrivacy: isAllowedProcedure
+        .input(z.object({
+            id: z.string(),
+            setPrivacyLevel: z.boolean(),
+        }))
+        .mutation(async ({ input: { id, setPrivacyLevel }, ctx: { prisma } }) => {
+            try {
+                return await prisma.paste.update({
+                    where: {
+                        id: id
+                    },
+                    data: {
+                        isPrivate: setPrivacyLevel
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+                throw new Error("Failed to update");
+            }
+        }),
+
 
 });
