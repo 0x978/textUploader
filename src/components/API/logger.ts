@@ -10,7 +10,7 @@ export default async function logger(state: Capitalize<string>, isImportant: boo
             second: "numeric"
         });
         const ipAddressArg = additionalArgs?.find((arg) => arg[0] === "IP");
-        if (ipAddressArg) {
+        if (ipAddressArg && ipAddressArg[1] !== undefined) {
             const res = await fetch(`https://ipapi.co/${ipAddressArg[1]}/json/`);
             const data = await res.json() as { country_name: string; city: string; utc_offset: string };
             const country = data.country_name;
@@ -26,7 +26,8 @@ TIME:${dateTime}
 ${(additionalArgs ?? []).map(([key, value]) => `${key}: ${value}`).join("\n")}
 `);
         printDivider(isImportant);
-    } catch (e) {
+    }
+    catch (e) {
         printDivider(true);
         console.log("LOGGING FAILED");
         console.log(e);
