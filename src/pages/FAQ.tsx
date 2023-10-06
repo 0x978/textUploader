@@ -42,10 +42,8 @@ const FAQ: FC = ({}) => {
 
                 <h1 className={"text-contrastingBlue"}>Can I store images if I point shareX to your API?</h1>
                 <p className={"text-superCoolEdgyPurple "}>
-                    No, I can&apos;t find a way to store images for cheap, if you know how let me know <br />
-                    I highly recommend <a href={"https://upload.systems"}
-                                          className={"underline text-green-400"}>upload.systems</a> if you want image
-                    hosting, they&apos;re pretty cool
+                    Not at the moment, but I am looking into creating an image hoster. <br/>
+                    If you have any good advice, please message me on discord @qhn
                 </p>
 
                 <h1 className={"text-contrastingBlue"}>Is the site open source?</h1>
