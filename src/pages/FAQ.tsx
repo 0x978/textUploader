@@ -53,12 +53,6 @@ const FAQ: FC = ({}) => {
                         click here</a>
                 </p>
 
-                <h1 className={"text-contrastingBlue"}>The code sucks</h1>
-                <p className={"text-superCoolEdgyPurple "}>
-                    Not a question but yeah probably.
-                </p>
-
-
                 <div>
                     <ReusableButton text={"Return"} onClick={() => void router.push("/")} isDangerous={true}/>
                 </div>

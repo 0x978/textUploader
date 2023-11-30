@@ -85,7 +85,7 @@ const SubmitPasteForm: FC<SubmitPasteFormProps> = ({ handleSubmit, handlePrivate
                     <h1>Paste Text</h1>
                     <SimpleMDE value={text} onChange={(value) => setText(value)} options={mdOptions} />
 
-                    <div className={"flex flex-col space-y-3  text-center"}>
+                    <div className={"flex flex-col space-y-3 text-center"}>
                         <ReusableButton text={"Set as private paste"} onClick={(e) => togglePrivate(e, isPrivate)}
                                         overrideWidth={"large"} overrideBackground={buttonBackground}
                                         overrideTextColour={"white"} />

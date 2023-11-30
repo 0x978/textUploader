@@ -164,9 +164,22 @@ const Id: FC<ctx> = (ctx) => {
                                 text={"Delete Post"}
                                 isDangerous={true}
                                 onClick={() => {
-                                    if (ctx.postID !== null) {
-                                        deleteItem({ id: ctx.postID });
-                                    }
+                                    if (ctx.postID)
+                                        void Swal.fire({
+                                            title: "Delete Paste?",
+                                            text: "You won't be able to revert this!",
+                                            icon: "warning",
+                                            showCancelButton: true,
+                                            confirmButtonColor: "#3085d6",
+                                            cancelButtonColor: "#d33",
+                                            confirmButtonText: "Confirm Deletion",
+                                            background: "#433151",
+                                            color: "#9e75f0"
+                                        }).then((result) => {
+                                            if (result.isConfirmed && ctx.postID) {
+                                                deleteItem({ id: ctx.postID });
+                                            }
+                                        });
                                 }}
                             />
                         ) : (
@@ -183,7 +196,7 @@ const Id: FC<ctx> = (ctx) => {
                             <div className={"space-x-3"}>
                                 <ReusableButton
                                     text={"Edit Post"}
-                                    onClick={() => void router.push(`/textEdit?id=${ctx.accessID}`)}
+                                    onClick={() => void router.push(`/edit?id=${ctx.accessID}&accessID=${ctx.accessID}`)}
                                 />
 
                                 <ReusableButton

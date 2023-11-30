@@ -21,7 +21,6 @@ const CustomURL: FC = () => {
 
 
     async function updateURL(){
-        if(checkIfReserved(URLValue)){return;}
         await fetch("/api/doesPasteExist/" + URLValue).then(r => {
             return r.json().then((data: pasteExist): void => {
                 if (data?.doesExist) {
@@ -44,7 +43,7 @@ const CustomURL: FC = () => {
                     })
                     void swal.fire({
                         title:"SUCCESS",
-                        text: "The URL has been updated.",
+                        text: "The URL has been updated, redirecting...",
                         toast: true,
                         position: "top",
                         timer: 1500,
@@ -52,32 +51,12 @@ const CustomURL: FC = () => {
                         showConfirmButton: false,
                         background:"#433151",
                         color:"#9e75f0",
+                    }).then((_) => {
+                        void router.push(`/${URLValue}`)
                     });
                 }
             })
         })
-    }
-
-    function checkIfReserved(URL:string){
-        const disallowedURLs:string[] = ["anonSubmit","customURL","edit","FAQ","groupSelect","pasteSelect","settings","shareXInstructions","submit","textEdit","unauthorisedPasteAccess","404"]
-        for(let i = 0; i < disallowedURLs.length;i++){
-            const curr = disallowedURLs[i]
-            if(typeof curr === "string" && URL.localeCompare(curr,"en",{sensitivity:`base`}) === 0){
-                void swal.fire({
-                    title: "ERROR",
-                    text: "The given URL matches a reserved page.",
-                    toast: true,
-                    position: "top",
-                    timer: 1500,
-                    icon: "error",
-                    showConfirmButton: false,
-                    background: "#433151",
-                    color: "#9e75f0",
-                });
-                return true
-            }
-        }
-        return false
     }
 
 
