@@ -23,4 +23,4 @@ The stack I used for this project was the T3 stack, this included:
 - Prisma
 - Tailwind CSS
 - tRPC
-- Planetscale for database hosting
+- MySQL
